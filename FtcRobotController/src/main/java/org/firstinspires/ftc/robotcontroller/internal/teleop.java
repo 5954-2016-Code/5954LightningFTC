@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 /**
  * Created by jwthane on 10/1/2016.
  */
-@TeleOp(name="FastDrive", group ="A-Team")
+@TeleOp(name="Teleop", group ="5954")
 public class teleop extends BaseFunctions{
 
     @Override
