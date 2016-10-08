@@ -69,6 +69,7 @@ public class FtcOpModeRegister implements OpModeRegister {
          */
         BlocksOpMode.registerAll(manager);
 
+        //manager.register("teleop", teleop.class);
         /**
          * Register OpModes that use the annotation-based registration mechanism.
          */
