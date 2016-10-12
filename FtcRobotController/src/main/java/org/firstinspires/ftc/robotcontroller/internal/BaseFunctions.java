@@ -87,7 +87,6 @@ public class BaseFunctions extends OpMode {
     }
     public void ExtendPower(double Power){
         ExtendMotor.setPower(deadzone(-Power));
-
     }
 
 }
