@@ -93,8 +93,8 @@ import java.util.Locale;
 public class LightningPushbotAutoDriveByGyro_Linear extends LinearOpMode {
 
     /* Declare OpMode members. */
-    HardwarePushbot         robot   = new HardwarePushbot();   // Use a Pushbot's hardware
-    //ModernRoboticsI2cGyro   gyro    = null;                    // Additional Gyro device
+    HardwareLightbot         robot   = new HardwareLightbot();   // Use a Pushbot's hardware
+    //ModernRobticsI2cGyro   gyro    = null;                    // Additional Gyro device
 
     // The IMU sensor object
     BNO055IMU imu;
