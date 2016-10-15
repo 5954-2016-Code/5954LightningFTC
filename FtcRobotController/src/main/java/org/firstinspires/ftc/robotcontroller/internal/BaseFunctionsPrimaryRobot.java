@@ -14,13 +14,15 @@ import java.sql.Time;
 public class BaseFunctionsPrimaryRobot extends OpMode {
 
     // DC Motors
-    DcMotor LeftDriveMotor,
-            RightDriveMotor,
-            ArmMotor,
-            ExtendMotor;
+    DcMotor LeftDriveMotor1, LeftDriveMotor2,
+            RightDriveMotor1, RightDriveMotor2,
+            LeftShootMotor, RightShootMotor,
+            ArmMotor;
+           //ExtendMotor
+    //Servo ballLoad, ballPickup;
 
-    Servo RightGrabber;
-    Servo LeftGrabber;
+    //Servo RightGrabber;
+    //Servo LeftGrabber;
 
     public Time Timer;
     ColorSensor rgbSensor;
@@ -30,13 +32,17 @@ public class BaseFunctionsPrimaryRobot extends OpMode {
 
     @Override
     public void init() {
-        LeftDriveMotor = hardwareMap.dcMotor.get("Left_Drive_Motor");
-        RightDriveMotor = hardwareMap.dcMotor.get("Right_Drive_Motor");
-        ArmMotor = hardwareMap.dcMotor.get("Arm_Motor");
-        ExtendMotor = hardwareMap.dcMotor.get("Extend_Motor");
+        LeftDriveMotor1 = hardwareMap.dcMotor.get("Left_Drive_Motor1");
+        RightDriveMotor1 = hardwareMap.dcMotor.get("Right_Drive_Motor1");
+        LeftDriveMotor2 = hardwareMap.dcMotor.get("Left_Drive_Motor2");
+        RightDriveMotor2 = hardwareMap.dcMotor.get("Right_Drive_Motor2");
+        LeftShootMotor = hardwareMap.dcMotor.get("Left_Shoot_Motor");
+        RightShootMotor = hardwareMap.dcMotor.get("Right_Shoot_Motor");
 
-        LeftGrabber = hardwareMap.servo.get("L_Grabber");
-        RightGrabber = hardwareMap.servo.get("R_Grabber");
+        ArmMotor = hardwareMap.dcMotor.get("Arm_Motor");
+        //ExtendMotor = hardwareMap.dcMotor.get("Extend_Motor");
+        //LeftGrabber = hardwareMap.servo.get("L_Grabber");
+        //RightGrabber = hardwareMap.servo.get("R_Grabber");
 
         //BallSensor = hardwareMap.digitalChannel.get("Ball_Sensor");
         //IRDetector = hardwareMap.digitalChannel.get("IR_Detector");
@@ -57,8 +63,10 @@ public class BaseFunctionsPrimaryRobot extends OpMode {
     private void driveSystem(double left, double right){
         left = deadzone(left);
         right = deadzone(right);
-        LeftDriveMotor.setPower(left);
-        RightDriveMotor.setPower(right);
+        LeftDriveMotor1.setPower(left);
+        LeftDriveMotor2.setPower(left);
+        RightDriveMotor1.setPower(right);
+        RightDriveMotor2.setPower(right);
     }
 
     public void ArcadeDrive(double ForwardPower, double TurnPower){
@@ -66,27 +74,37 @@ public class BaseFunctionsPrimaryRobot extends OpMode {
                 TurnPower + ForwardPower);
     }
 
-    public void GrabberPosition(float RightButtonValue)
+    public void ShootBall(boolean AButtonValue)
     {
-        if (RightButtonValue>0)
+        double shootingPower = 0;
+        if (AButtonValue == true)
         {
-            //Open the Grabber
-            LeftGrabber.setPosition(.75);
-            RightGrabber.setPosition(.75);
+            shootingPower = 0.5;
         }
-        else
-        {
-            //Default--Keep the Grabber Closed
-            LeftGrabber.setPosition(1);
-            RightGrabber.setPosition(1);
-        }
-   }
+        LeftShootMotor.setPower(shootingPower);
+        RightShootMotor.setPower(-shootingPower);
+    }
+//    public void GrabberPosition(float RightButtonValue)
+//    {
+//        if (RightButtonValue>0)
+//        {
+//            //Open the Grabber
+//            LeftGrabber.setPosition(.75);
+//            RightGrabber.setPosition(.75);
+//        }
+//        else
+//        {
+//            //Default--Keep the Grabber Closed
+//            LeftGrabber.setPosition(1);
+//            RightGrabber.setPosition(1);
+//        }
+//   }
 
     public void ArmPower(double Power){
         ArmMotor.setPower(deadzone(-Power));
     }
-    public void ExtendPower(double Power){
-        ExtendMotor.setPower(deadzone(-Power));
-    }
+//    public void ExtendPower(double Power){
+//        ExtendMotor.setPower(deadzone(-Power));
+//    }
 
 }
