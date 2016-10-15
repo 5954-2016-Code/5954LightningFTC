@@ -36,11 +36,12 @@ public class BaseFunctionsPrimaryRobot extends OpMode {
         RightDriveMotor1 = hardwareMap.dcMotor.get("Right_Drive_Motor1");
         LeftDriveMotor2 = hardwareMap.dcMotor.get("Left_Drive_Motor2");
         RightDriveMotor2 = hardwareMap.dcMotor.get("Right_Drive_Motor2");
-        LeftShootMotor = hardwareMap.dcMotor.get("Left_Shoot_Motor");
-        RightShootMotor = hardwareMap.dcMotor.get("Right_Shoot_Motor");
+        LeftShootMotor = hardwareMap.dcMotor.get("Left_Shooter");
+        RightShootMotor = hardwareMap.dcMotor.get("Right_Shooter");
 
-        ArmMotor = hardwareMap.dcMotor.get("Arm_Motor");
-        //ExtendMotor = hardwareMap.dcMotor.get("Extend_Motor");
+//        ArmMotor = hardwareMap.dcMotor.get("Arm_Motor");
+        //ExtendBottom = hardwareMap.dcMotor.get("Extend_Bottom");
+        //ExtendTop = hardwareMap.dcMotor.get("Extend_Top");
         //LeftGrabber = hardwareMap.servo.get("L_Grabber");
         //RightGrabber = hardwareMap.servo.get("R_Grabber");
 
@@ -81,8 +82,8 @@ public class BaseFunctionsPrimaryRobot extends OpMode {
         {
             shootingPower = 0.5;
         }
-        LeftShootMotor.setPower(shootingPower);
-        RightShootMotor.setPower(-shootingPower);
+        LeftShootMotor.setPower(-shootingPower);
+        RightShootMotor.setPower(shootingPower);
     }
 //    public void GrabberPosition(float RightButtonValue)
 //    {
@@ -100,9 +101,9 @@ public class BaseFunctionsPrimaryRobot extends OpMode {
 //        }
 //   }
 
-    public void ArmPower(double Power){
-        ArmMotor.setPower(deadzone(-Power));
-    }
+//    public void ArmPower(double Power){
+//        ArmMotor.setPower(deadzone(-Power));
+//    }
 //    public void ExtendPower(double Power){
 //        ExtendMotor.setPower(deadzone(-Power));
 //    }
