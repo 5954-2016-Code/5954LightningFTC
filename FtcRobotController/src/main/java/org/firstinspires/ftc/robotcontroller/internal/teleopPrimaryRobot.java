@@ -13,6 +13,7 @@ public class teleopPrimaryRobot extends BaseFunctionsPrimaryRobot {
         this.ArcadeDrive(gamepad1.right_stick_x, gamepad1.left_stick_y);
         //this.ArmPower(gamepad2.left_stick_y);
         this.ShootBall(gamepad2.a);
+        this.BallSystem(gamepad2.right_trigger, gamepad2.left_trigger);
 
         //this.ExtendPower(gamepad2.right_stick_y);
         //this.GrabberPosition(gamepad2.right_trigger);

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.robotcontroller.internal;
 
+import android.graphics.Path;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,7 +11,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 import java.sql.Time;
 
 /**
- * Created by jwthane on 10/1/2016.
+ * @author jwthane
+ * @author spzproductions
+ * @author bradenthane
  */
 public class BaseFunctionsPrimaryRobot extends OpMode {
 
@@ -18,11 +22,9 @@ public class BaseFunctionsPrimaryRobot extends OpMode {
             RightDriveMotor1, RightDriveMotor2,
             LeftShootMotor, RightShootMotor,
             ArmMotor;
-           //ExtendMotor
-    //Servo ballLoad, ballPickup;
 
-    //Servo RightGrabber;
-    //Servo LeftGrabber;
+           //ExtendMotor
+    Servo BallSuck, BallConveyor;
 
     public Time Timer;
     ColorSensor rgbSensor;
@@ -38,15 +40,14 @@ public class BaseFunctionsPrimaryRobot extends OpMode {
         RightDriveMotor2 = hardwareMap.dcMotor.get("Right_Drive_Motor2");
         LeftShootMotor = hardwareMap.dcMotor.get("Left_Shooter");
         RightShootMotor = hardwareMap.dcMotor.get("Right_Shooter");
+        BallConveyor = hardwareMap.servo.get("Ball_Convey");
+        BallSuck = hardwareMap.servo.get("Ball_Suck");
 
 //        ArmMotor = hardwareMap.dcMotor.get("Arm_Motor");
         //ExtendBottom = hardwareMap.dcMotor.get("Extend_Bottom");
         //ExtendTop = hardwareMap.dcMotor.get("Extend_Top");
-        //LeftGrabber = hardwareMap.servo.get("L_Grabber");
-        //RightGrabber = hardwareMap.servo.get("R_Grabber");
 
         //BallSensor = hardwareMap.digitalChannel.get("Ball_Sensor");
-        //IRDetector = hardwareMap.digitalChannel.get("IR_Detector");
         //rgbSensor = hardwareMap.colorSensor.get("ColorSensor");
     }
 
@@ -85,27 +86,16 @@ public class BaseFunctionsPrimaryRobot extends OpMode {
         LeftShootMotor.setPower(-shootingPower);
         RightShootMotor.setPower(shootingPower);
     }
-//    public void GrabberPosition(float RightButtonValue)
-//    {
-//        if (RightButtonValue>0)
-//        {
-//            //Open the Grabber
-//            LeftGrabber.setPosition(.75);
-//            RightGrabber.setPosition(.75);
-//        }
-//        else
-//        {
-//            //Default--Keep the Grabber Closed
-//            LeftGrabber.setPosition(1);
-//            RightGrabber.setPosition(1);
-//        }
-//   }
 
-//    public void ArmPower(double Power){
-//        ArmMotor.setPower(deadzone(-Power));
-//    }
-//    public void ExtendPower(double Power){
-//        ExtendMotor.setPower(deadzone(-Power));
-//    }
+    public void BallSystem(double PowerForward, double PowerBackwards){
+
+        if (PowerForward > 0){
+            BallSuck.setDirection(Servo.Direction.FORWARD);
+            BallConveyor.setDirection(Servo.Direction.FORWARD);
+        }else if(PowerBackwards > 0){
+            BallSuck.setDirection(Servo.Direction.REVERSE);
+            BallConveyor.setDirection(Servo.Direction.REVERSE);
+        }
+    }
 
 }

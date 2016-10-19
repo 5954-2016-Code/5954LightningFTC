@@ -63,7 +63,7 @@ public class FtcOpModeRegister implements OpModeRegister {
      * @see com.qualcomm.robotcore.eventloop.opmode.Autonomous
      */
     public void register(OpModeManager manager) {
-
+        //manager.register("teleopTestRobot", teleopTestRobot.class);
         /**
          * Register OpModes implemented in the Blocks visual programming language.
          */

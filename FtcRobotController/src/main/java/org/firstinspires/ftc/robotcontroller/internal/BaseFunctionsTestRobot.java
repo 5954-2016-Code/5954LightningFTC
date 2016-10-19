@@ -32,11 +32,11 @@ public class BaseFunctionsTestRobot extends OpMode {
     public void init() {
         LeftDriveMotor = hardwareMap.dcMotor.get("Left_Drive_Motor");
         RightDriveMotor = hardwareMap.dcMotor.get("Right_Drive_Motor");
-        ArmMotor = hardwareMap.dcMotor.get("Arm_Motor");
-        ExtendMotor = hardwareMap.dcMotor.get("Extend_Motor");
+       // ArmMotor = hardwareMap.dcMotor.get("Arm_Motor");
+        //ExtendMotor = hardwareMap.dcMotor.get("Extend_Motor");
 
-        LeftGrabber = hardwareMap.servo.get("L_Grabber");
-        RightGrabber = hardwareMap.servo.get("R_Grabber");
+        //LeftGrabber = hardwareMap.servo.get("L_Grabber");
+        //RightGrabber = hardwareMap.servo.get("R_Grabber");
 
         //BallSensor = hardwareMap.digitalChannel.get("Ball_Sensor");
         //IRDetector = hardwareMap.digitalChannel.get("IR_Detector");
