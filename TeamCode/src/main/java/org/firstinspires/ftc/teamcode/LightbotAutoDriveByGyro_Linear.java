@@ -150,7 +150,7 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
             angles   = imu.getAngularOrientation().toAxesReference(AxesReference.INTRINSIC).toAxesOrder(AxesOrder.ZYX);
             //telemetry.addData(">", "Robot Heading = %d", gyro.getIntegratedZValue());
 
-            telemetry.addData(">", "Robot Heading = %d", new Func<String>() {
+            telemetry.addData(">", "Robot Heading = %s", new Func<String>() {
                 @Override public String value() {
                     return formatAngle(angles.angleUnit, angles.firstAngle);
                 }
