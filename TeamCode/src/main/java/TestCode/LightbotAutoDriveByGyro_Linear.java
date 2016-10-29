@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package TestCode;
 
 import com.qualcomm.hardware.adafruit.BNO055IMU;
 import com.qualcomm.hardware.adafruit.JustLoggingAccelerationIntegrator;
@@ -17,6 +17,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 import java.util.Locale;
+
+import TestCode.HardwareLightbot;
 
 /**
  * This file illustrates the concept of driving a path based on Gyro heading and encoder counts.
@@ -58,7 +60,7 @@ import java.util.Locale;
 public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
 
     /* Declare OpMode members. */
-    HardwareLightbot         robot   = new HardwareLightbot();   // Use Lightbot's hardware
+    HardwareLightbot robot   = new HardwareLightbot();   // Use Lightbot's hardware
     //ModernRobticsI2cGyro   gyro    = null;                    // Additional Gyro device
 
     // The Adafruit IMU sensor object
