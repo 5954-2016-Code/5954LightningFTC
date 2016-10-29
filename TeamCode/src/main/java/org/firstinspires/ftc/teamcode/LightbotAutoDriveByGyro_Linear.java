@@ -61,7 +61,7 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
     HardwareLightbot         robot   = new HardwareLightbot();   // Use Lightbot's hardware
     //ModernRobticsI2cGyro   gyro    = null;                    // Additional Gyro device
 
-    // The IMU sensor object
+    // The Adafruit IMU sensor object
     BNO055IMU imu;
 
     // State used for updating telemetry
@@ -69,9 +69,9 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
     Orientation newAngles;
 
     Acceleration gravity;
-
-    static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
+                                                            //Output counts per revolution of Output Shaft
+    static final double     COUNTS_PER_MOTOR_REV    = 1120; //(cpr): 1120 (280 rises of Channel A) // eg: TETRIX Motor Encoder: 1440
+    static final double     DRIVE_GEAR_REDUCTION    = 1;   //2.0 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
                                                       (WHEEL_DIAMETER_INCHES * 3.1415);
@@ -134,7 +134,7 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
 
         // make sure the gyro is calibrated before continuing
         //while (gyro.isCalibrating())  {
-        while (imu.isGyroCalibrated())  {
+        while (imu.isGyroCalibrated() == false)  {
             Thread.sleep(50);
             idle();
         }

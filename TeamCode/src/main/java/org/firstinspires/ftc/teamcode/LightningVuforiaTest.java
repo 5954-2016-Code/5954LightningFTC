@@ -222,6 +222,7 @@ public class LightningVuforiaTest extends LinearOpMode {
         OpenGLMatrix redTargetLocationOnField = OpenGLMatrix
                 /* Then we translate the target off to the RED WALL. Our translation here
                 is a negative translation in X.*/
+                //change from 1/2 to .41666666667--gears and .75--tools
                 .translation(-mmFTCFieldWidth/2, 0, 0)
                 .multiplied(Orientation.getRotationMatrix(
                         /* First, in the fixed (field) coordinate system, we rotate 90deg in X, then 90 in Z */
@@ -238,6 +239,7 @@ public class LightningVuforiaTest extends LinearOpMode {
         OpenGLMatrix blueTargetLocationOnField = OpenGLMatrix
                 /* Then we translate the target off to the Blue Audience wall.
                 Our translation here is a positive translation in Y.*/
+                //change from 1/2 to .41666666667--wheels and .75--legos
                 .translation(0, mmFTCFieldWidth/2, 0)
                 .multiplied(Orientation.getRotationMatrix(
                         /* First, in the fixed (field) coordinate system, we rotate 90deg in X */
