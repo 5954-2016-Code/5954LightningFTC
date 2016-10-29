@@ -119,8 +119,8 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
 
-        // Start the logging of measured acceleration
-        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+//        // Start the logging of measured acceleration
+//        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
         // Ensure the robot it stationary, then reset the encoders and calibrate the gyro.
         robot.leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -134,7 +134,7 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
 
         // make sure the gyro is calibrated before continuing
         //while (gyro.isCalibrating())  {
-        while (imu.isGyroCalibrated() == false)  {
+        while (imu.isGyroCalibrated())  {
             Thread.sleep(50);
             idle();
         }
@@ -149,12 +149,12 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
         while (!isStarted()) {
             angles   = imu.getAngularOrientation().toAxesReference(AxesReference.INTRINSIC).toAxesOrder(AxesOrder.ZYX);
             //telemetry.addData(">", "Robot Heading = %d", gyro.getIntegratedZValue());
-
-            telemetry.addData(">", "Robot Heading = %s", new Func<String>() {
-                @Override public String value() {
-                    return formatAngle(angles.angleUnit, angles.firstAngle);
-                }
-            });
+            telemetry.addData(">", "Robot Heading = %.1f", angleDegrees(angles.angleUnit, angles.firstAngle));
+//            telemetry.addData(">", "Robot Heading = %s", new Func<String>() {
+//                @Override public String value() {
+//                    return formatAngle(angles.angleUnit, angles.firstAngle);
+//                }
+//            });
             telemetry.update();
             idle();
         }
@@ -407,6 +407,10 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
     //----------------------------------------------------------------------------------------------
     // Formatting
     //----------------------------------------------------------------------------------------------
+
+    public double angleDegrees(AngleUnit angleUnit, double angle) {
+        return AngleUnit.DEGREES.fromUnit(angleUnit, angle);
+    }
 
     String formatAngle(AngleUnit angleUnit, double angle) {
         return formatDegrees(AngleUnit.DEGREES.fromUnit(angleUnit, angle));
