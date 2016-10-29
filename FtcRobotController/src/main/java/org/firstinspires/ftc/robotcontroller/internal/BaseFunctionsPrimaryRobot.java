@@ -3,6 +3,7 @@ package org.firstinspires.ftc.robotcontroller.internal;
 import android.graphics.Path;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -17,36 +18,45 @@ import java.sql.Time;
  */
 public class BaseFunctionsPrimaryRobot extends OpMode {
 
-    // DC Motors
     DcMotor LeftDriveMotor1, LeftDriveMotor2,
             RightDriveMotor1, RightDriveMotor2,
-            LeftShootMotor, RightShootMotor,
-            ArmMotor;
+            LeftShootMotor, RightShootMotor;
 
-           //ExtendMotor
-    Servo BallSuck, BallConveyor;
+    CRServo BallSuck,
+            BallConveyor;
 
-    public Time Timer;
     ColorSensor rgbSensor;
 
-    private DigitalChannel BallSensor,
+    public Time Timer;
+
+    private DigitalChannel
+            BallSensor,
             IRDetector;
 
     @Override
     public void init() {
-        LeftDriveMotor1 = hardwareMap.dcMotor.get("Left_Drive_Motor1");
+        //DC MOTORS
+        //Drive Right
         RightDriveMotor1 = hardwareMap.dcMotor.get("Right_Drive_Motor1");
-        LeftDriveMotor2 = hardwareMap.dcMotor.get("Left_Drive_Motor2");
         RightDriveMotor2 = hardwareMap.dcMotor.get("Right_Drive_Motor2");
+
+        //Drive Left
+        LeftDriveMotor1 = hardwareMap.dcMotor.get("Left_Drive_Motor1");
+        LeftDriveMotor2 = hardwareMap.dcMotor.get("Left_Drive_Motor2");
+
+        //Shooter NeveRest Motors
         LeftShootMotor = hardwareMap.dcMotor.get("Left_Shooter");
         RightShootMotor = hardwareMap.dcMotor.get("Right_Shooter");
-        BallConveyor = hardwareMap.servo.get("Ball_Convey");
-        BallSuck = hardwareMap.servo.get("Ball_Suck");
 
-//        ArmMotor = hardwareMap.dcMotor.get("Arm_Motor");
+        //Arm Extend Motors
         //ExtendBottom = hardwareMap.dcMotor.get("Extend_Bottom");
         //ExtendTop = hardwareMap.dcMotor.get("Extend_Top");
 
+        //CONTINUOUS ROTATION SERVOS
+        BallConveyor = hardwareMap.crservo.get("Ball_Convey");
+        BallSuck = hardwareMap.crservo.get("Ball_Suck");
+
+        //SENSORS
         //BallSensor = hardwareMap.digitalChannel.get("Ball_Sensor");
         //rgbSensor = hardwareMap.colorSensor.get("ColorSensor");
     }
@@ -76,12 +86,12 @@ public class BaseFunctionsPrimaryRobot extends OpMode {
                 TurnPower + ForwardPower);
     }
 
-    public void ShootBall(boolean AButtonValue)
+    public void ShootBall(boolean Button)
     {
         double shootingPower = 0;
-        if (AButtonValue == true)
+        if (Button == true)
         {
-            shootingPower = 0.5;
+            shootingPower = 0.75;
         }
         LeftShootMotor.setPower(-shootingPower);
         RightShootMotor.setPower(shootingPower);
@@ -90,11 +100,14 @@ public class BaseFunctionsPrimaryRobot extends OpMode {
     public void BallSystem(double PowerForward, double PowerBackwards){
 
         if (PowerForward > 0){
-            BallSuck.setDirection(Servo.Direction.FORWARD);
-            BallConveyor.setDirection(Servo.Direction.FORWARD);
+            BallSuck.setPower(1);
+            BallConveyor.setPower(1);
         }else if(PowerBackwards > 0){
-            BallSuck.setDirection(Servo.Direction.REVERSE);
-            BallConveyor.setDirection(Servo.Direction.REVERSE);
+            BallSuck.setPower(-1);
+            BallConveyor.setPower(-1);
+        }else{
+            BallSuck.setPower(0);
+            BallConveyor.setPower(0);
         }
     }
 
