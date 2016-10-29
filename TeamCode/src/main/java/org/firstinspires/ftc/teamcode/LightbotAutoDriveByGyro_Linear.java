@@ -83,7 +83,7 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
 
     static final double     HEADING_THRESHOLD       = 1 ;      // As tight as we can make it with an integer gyro
     static final double     P_TURN_COEFF            = 0.1;     // Larger is more responsive, but also less stable
-    static final double     P_DRIVE_COEFF           = 0.15;     // Larger is more responsive, but also less stable
+    static final double     P_DRIVE_COEFF           = 0.07; //Original: 0.15;     // Larger is more responsive, but also less stable
 
     private void resetIMU_Position_Integration()
     {
@@ -164,7 +164,7 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
         // Put a hold after each turn
 
-        gyroDrive(DRIVE_SPEED, 6.0, 0.0);  // Drive FWD 6 inches
+        gyroDrive(DRIVE_SPEED, 48, 0.0);  // Drive FWD 6 inches
         gyroTurn(TURN_SPEED, 45.0);        // Turn CW to 45 Degrees
         gyroHold(TURN_SPEED, 45.0, 0.5);   // Hold 45 Deg heading for 1/2 second
 
@@ -386,7 +386,8 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
         // calculate error in -179 to +180 range  (
         newAngles  = imu.getAngularOrientation().toAxesReference(AxesReference.INTRINSIC).toAxesOrder(AxesOrder.ZYX);
         //robotError = targetAngle - gyro.getIntegratedZValue();
-        robotError = targetAngle - AngleUnit.DEGREES.fromUnit(newAngles.angleUnit, newAngles.firstAngle);
+        //robotError = targetAngle - AngleUnit.DEGREES.fromUnit(newAngles.angleUnit, newAngles.firstAngle);
+        robotError = targetAngle + AngleUnit.DEGREES.fromUnit(newAngles.angleUnit, newAngles.firstAngle);
         while (robotError > 180)  robotError -= 360;
         while (robotError <= -180) robotError += 360;
         return robotError;
