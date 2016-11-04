@@ -20,4 +20,13 @@ public class BallManagementSystem {
         sBallIntake = HWMap.servo.get("sBallIntake");
         sBallLift = HWMap.servo.get("sBallLift");
     }
+
+    public void IntakePower(double power){
+        sBallIntake.setPosition(power/2 + 0.5f);
+    }
+
+    public void LiftPower(double power){
+        sBallLift.setPosition(power/2 + 0.5f);
+    }
+
 }

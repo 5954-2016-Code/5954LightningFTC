@@ -8,20 +8,49 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Created by ericw on 11/2/2016.
  */
 
+enum Color {Red, Blue, Other}
+
 public class ButtonPushSystem {
     // Button Push System
-    public Servo sPushL = null,
-            sPushR = null;
+    public Servo    sPushF = null,
+                    sPushR = null;
 
-    public ColorSensor csPushL = null,
-            csPushR = null;
+    public ColorSensor  csPushF = null,
+                        csPushR = null;
+
+    static final double upPosition = 1.0f,
+                        downPosition =  0.5f;
 
     public void init(HardwareMap HWMap) {
         // Button Push System Init
-        sPushL = HWMap.servo.get("sPushL");
+        sPushF = HWMap.servo.get("sPushL");
         sPushR = HWMap.servo.get("sPushR");
-        csPushL = HWMap.colorSensor.get("csPushL");
+        csPushF = HWMap.colorSensor.get("csPushL");
         csPushR = HWMap.colorSensor.get("csPushR");
+    }
+
+    public Color PoleFrontSensor(){
+        return (csPushF.blue() > csPushF.red() ? Color.Blue : Color.Red);
+    }
+
+    public Color PoleRearSensor(){
+        return (csPushR.blue() > csPushR.red() ? Color.Blue : Color.Red);
+    }
+
+    public void FrontPushOut(){
+        sPushF.setPosition(downPosition);
+    }
+
+    public  void FrontPushIn(){
+        sPushF.setPosition(upPosition);
+    }
+
+    public void RearPushOut(){
+        sPushR.setPosition(downPosition);
+    }
+
+    public void RearPushIn(){
+        sPushR.setPosition(upPosition);
     }
 
 }

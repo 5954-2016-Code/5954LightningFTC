@@ -18,7 +18,6 @@ public class LightningFuntions extends OpMode {
 
     // Chassis Sensors
     public ColorSensor csChasis = null;
-    public BNO055IMU imuChasis = null;
 
     // Misc Properties
     private ElapsedTime period  = new ElapsedTime();
@@ -51,7 +50,7 @@ public class LightningFuntions extends OpMode {
 
         // Chassis Sensor Init
         csChasis = hardwareMap.colorSensor.get("csChasis");
-        imuChasis = hardwareMap.get(BNO055IMU.class, "imu");
+
     }
 
     @Override
