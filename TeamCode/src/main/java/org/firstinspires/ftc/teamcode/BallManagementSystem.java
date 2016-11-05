@@ -21,12 +21,37 @@ public class BallManagementSystem {
         sBallLift = HWMap.servo.get("sBallLift");
     }
 
-    public void IntakePower(double power){
+    private void IntakePower(double power){
         sBallIntake.setPosition(power/2 + 0.5f);
     }
-
-    public void LiftPower(double power){
+    private void LiftPower(double power){
         sBallLift.setPosition(power/2 + 0.5f);
     }
+
+    public void Intake(boolean In, boolean Out){
+        if (In){
+            IntakePower(1);
+        }
+        else if (Out){
+            IntakePower(-1);
+        }
+        else {
+            IntakePower(0);
+        }
+
+    }
+
+    public void Lift(boolean Up, boolean Down){
+        if (Up){
+            LiftPower(1);
+        }
+        else if (Down){
+            LiftPower(-1);
+        }
+        else{
+            LiftPower(0);
+        }
+    }
+
 
 }

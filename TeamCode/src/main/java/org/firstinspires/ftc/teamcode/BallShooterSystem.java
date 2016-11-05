@@ -21,7 +21,7 @@ public class BallShooterSystem {
 
         // Ball Shooter System Init
         mShooterL = HWMap.dcMotor.get("mShooterL");
-        mShooterR = HWMap.dcMotor.get("mShooterL");
+        mShooterR = HWMap.dcMotor.get("mShooterR");
         mShooterR.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 

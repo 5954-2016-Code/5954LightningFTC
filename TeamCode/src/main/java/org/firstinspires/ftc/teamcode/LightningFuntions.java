@@ -54,6 +54,10 @@ public class LightningFuntions extends OpMode {
     }
 
     @Override
+    public void start(){
+    }
+
+    @Override
     public void loop() {
     }
 }

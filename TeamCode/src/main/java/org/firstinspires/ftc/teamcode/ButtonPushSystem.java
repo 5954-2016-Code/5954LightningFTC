@@ -15,22 +15,16 @@ public class ButtonPushSystem {
     public Servo    sPushF = null,
                     sPushR = null;
 
-    public ColorSensor  csPushF = null,
-                        csPushR = null;
+    public ColorSensor  csPushR = null;
 
     static final double upPosition = 1.0f,
                         downPosition =  0.5f;
 
     public void init(HardwareMap HWMap) {
         // Button Push System Init
-        sPushF = HWMap.servo.get("sPushL");
+        sPushF = HWMap.servo.get("sPushF");
         sPushR = HWMap.servo.get("sPushR");
-        csPushF = HWMap.colorSensor.get("csPushL");
         csPushR = HWMap.colorSensor.get("csPushR");
-    }
-
-    public Color PoleFrontSensor(){
-        return (csPushF.blue() > csPushF.red() ? Color.Blue : Color.Red);
     }
 
     public Color PoleRearSensor(){
