@@ -1,8 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 /**
  * Created by ericw on 11/4/2016.
  */
+
+@TeleOp(name = "Teleop", group = "Test")
 
 public class LightningTeleop extends LightningFuntions {
 

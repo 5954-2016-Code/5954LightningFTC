@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.adafruit.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
@@ -45,6 +47,8 @@ public class DriveSystemBase {
         mDriveL2 = HWMap.dcMotor.get("mDriveL2");
         mDriveR1 = HWMap.dcMotor.get("mDriveR1");
         mDriveR2 = HWMap.dcMotor.get("mDriveR2");
+        mDriveR1.setDirection(DcMotorSimple.Direction.REVERSE);
+        mDriveR2.setDirection(DcMotorSimple.Direction.REVERSE);
         imuChasis = HWMap.get(BNO055IMU.class, "imu");
     }
 
@@ -54,8 +58,8 @@ public class DriveSystemBase {
     }
 
     private void driveSystem(double left, double right){
-        left = deadzone(left);
-        right = deadzone(right);
+        left = Range.clip(left,-1.0,1.0);
+        right = Range.clip(right,-1.0,1.0);
         mDriveL1.setPower(left);
         mDriveL2.setPower(left);
         mDriveR1.setPower(right);
