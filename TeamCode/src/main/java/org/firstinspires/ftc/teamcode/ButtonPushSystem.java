@@ -18,12 +18,13 @@ public class ButtonPushSystem {
     public ColorSensor  csPushR = null;
 
     static final double upPosition = 1.0f,
-                        downPosition =  0.5f;
+                        downPosition =  -1.0f;
 
     public void init(HardwareMap HWMap) {
         // Button Push System Init
         sPushF = HWMap.servo.get("sPushF");
         sPushR = HWMap.servo.get("sPushR");
+        sPushR.setDirection(Servo.Direction.REVERSE);
         csPushR = HWMap.colorSensor.get("csPushR");
     }
 

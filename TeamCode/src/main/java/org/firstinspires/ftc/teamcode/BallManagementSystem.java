@@ -31,14 +31,16 @@ public class BallManagementSystem {
     public void Intake(boolean In, boolean Out){
         if (In){
             IntakePower(1);
+            LiftPower(1);
         }
         else if (Out){
             IntakePower(-1);
+            LiftPower(-1);
         }
         else {
             IntakePower(0);
+            LiftPower(0);
         }
-
     }
 
     public void Lift(boolean Up, boolean Down){
