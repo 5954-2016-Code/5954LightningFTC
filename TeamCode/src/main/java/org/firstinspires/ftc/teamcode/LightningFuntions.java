@@ -23,7 +23,7 @@ public class LightningFuntions extends OpMode {
     // Misc Properties
     private ElapsedTime period  = new ElapsedTime();
 
-
+    private boolean first_run = false;
 
     public void waitForTick(long periodMs) throws InterruptedException {
 
@@ -52,11 +52,18 @@ public class LightningFuntions extends OpMode {
 
         // Chassis Sensor Init
         csChasis = hardwareMap.colorSensor.get("csChasis");
+        first_run = false;
+    }
+
+    @Override
+    public void init_loop(){
+
 
     }
 
     @Override
     public void start(){
+
     }
 
     @Override

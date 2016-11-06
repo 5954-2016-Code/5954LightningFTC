@@ -48,8 +48,8 @@ public class DriveSystemBase {
         mDriveL2 = HWMap.dcMotor.get("mDriveL2");
         mDriveR1 = HWMap.dcMotor.get("mDriveR1");
         mDriveR2 = HWMap.dcMotor.get("mDriveR2");
-        mDriveR1.setDirection(DcMotorSimple.Direction.REVERSE);
-        mDriveR2.setDirection(DcMotorSimple.Direction.REVERSE);
+        mDriveL1.setDirection(DcMotorSimple.Direction.REVERSE);
+        mDriveL2.setDirection(DcMotorSimple.Direction.REVERSE);
         imuChasis = HWMap.get(BNO055IMU.class, "imu");
     }
 

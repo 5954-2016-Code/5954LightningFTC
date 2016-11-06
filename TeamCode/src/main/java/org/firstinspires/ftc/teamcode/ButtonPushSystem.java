@@ -17,8 +17,8 @@ public class ButtonPushSystem {
 
     public ColorSensor  csPushR = null;
 
-    static final double upPosition = 1.0f,
-                        downPosition =  -1.0f;
+    static final double downPosition = .75f,
+                        upPosition =  -.75f;
 
     public void init(HardwareMap HWMap) {
         // Button Push System Init
