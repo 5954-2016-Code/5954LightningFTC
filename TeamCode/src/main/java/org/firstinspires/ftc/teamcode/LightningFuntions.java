@@ -15,6 +15,7 @@ public class LightningFuntions extends OpMode {
     BallManagementSystem BallManagement = new BallManagementSystem();
     BallShooterSystem BallShooter = new BallShooterSystem();
     ButtonPushSystem ButtonPush = new ButtonPushSystem();
+    LargeBallLiftSystem BallLift = new LargeBallLiftSystem();
 
     // Chassis Sensors
     public ColorSensor csChasis = null;
@@ -47,6 +48,7 @@ public class LightningFuntions extends OpMode {
         BallManagement.init(hardwareMap);
         BallShooter.init(hardwareMap);
         ButtonPush.init(hardwareMap);
+        BallLift.init(hardwareMap);
 
         // Chassis Sensor Init
         csChasis = hardwareMap.colorSensor.get("csChasis");

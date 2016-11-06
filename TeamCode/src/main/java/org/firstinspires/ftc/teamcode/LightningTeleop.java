@@ -15,6 +15,10 @@ public class LightningTeleop extends LightningFuntions {
         this.DriveSystem.ArcadeDrive(gamepad1.left_stick_y, gamepad1.right_stick_x);
         this.BallManagement.Intake(gamepad1.left_bumper, gamepad2.x);
         this.BallManagement.Lift(gamepad2.a, gamepad2.b);
+        this.BallLift.armDrive1(gamepad2.left_stick_y);
+        this.BallLift.armDrive2(gamepad2.right_stick_y);
+        this.ButtonPush.TeleopButtonPush(gamepad2.x, gamepad2.b);
+
 
         if (gamepad2.right_bumper) {
             this.BallShooter.ShootBall();

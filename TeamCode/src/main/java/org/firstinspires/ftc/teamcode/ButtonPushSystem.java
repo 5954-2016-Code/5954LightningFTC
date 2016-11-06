@@ -47,4 +47,20 @@ public class ButtonPushSystem {
         sPushR.setPosition(upPosition);
     }
 
+    public void TeleopButtonPush(boolean FrontButton, boolean RearButton){
+        if (FrontButton){
+            FrontPushOut();
+        }
+        else{
+            FrontPushIn();
+        }
+
+        if (RearButton){
+            RearPushOut();
+        }
+        else{
+            RearPushIn();
+        }
+    }
+
 }
