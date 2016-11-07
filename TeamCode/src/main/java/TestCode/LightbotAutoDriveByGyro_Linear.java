@@ -71,12 +71,12 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
     Orientation newAngles;
 
     Acceleration gravity;
-                                                            //Output counts per revolution of Output Shaft
+    //Output counts per revolution of Output Shaft
     static final double     COUNTS_PER_MOTOR_REV    = 1120; //(cpr): 1120 (280 rises of Channel A) // eg: TETRIX Motor Encoder: 1440
     static final double     DRIVE_GEAR_REDUCTION    = 1;   //2.0 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-                                                      (WHEEL_DIAMETER_INCHES * 3.1415);
+            (WHEEL_DIAMETER_INCHES * 3.1415);
 
     // These constants define the desired driving/control characteristics
     // The can/should be tweaked to suite the specific robot drive train.
@@ -136,7 +136,7 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
 
         // make sure the gyro is calibrated before continuing
         //while (gyro.isCalibrating())  {
-        while (imu.isGyroCalibrated() == false)  {
+        while (imu.isGyroCalibrated())  {
             Thread.sleep(50);
             idle();
         }
@@ -151,12 +151,12 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
         while (!isStarted()) {
             angles   = imu.getAngularOrientation().toAxesReference(AxesReference.INTRINSIC).toAxesOrder(AxesOrder.ZYX);
             //telemetry.addData(">", "Robot Heading = %d", gyro.getIntegratedZValue());
-
-            telemetry.addData(">", "Robot Heading = %s", new Func<String>() {
-                @Override public String value() {
-                    return formatAngle(angles.angleUnit, angles.firstAngle);
-                }
-            });
+            telemetry.addData(">", "Robot Heading = %.1f", angleDegrees(angles.angleUnit, angles.firstAngle));
+//            telemetry.addData(">", "Robot Heading = %s", new Func<String>() {
+//                @Override public String value() {
+//                    return formatAngle(angles.angleUnit, angles.firstAngle);
+//                }
+//            });
             telemetry.update();
             idle();
         }
@@ -186,18 +186,18 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
     }
 
 
-   /**
-    *  Method to drive on a fixed compass bearing (angle), based on encoder counts.
-    *  Move will stop if either of these conditions occur:
-    *  1) Move gets to the desired position
-    *  2) Driver stops the opmode running.
-    *
-    * @param speed      Target speed for forward motion.  Should allow for _/- variance for adjusting heading
-    * @param distance   Distance (in inches) to move from current position.  Negative distance means move backwards.
-    * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
-    *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
-    *                   If a relative angle is required, add/subtract from current heading.
-    */
+    /**
+     *  Method to drive on a fixed compass bearing (angle), based on encoder counts.
+     *  Move will stop if either of these conditions occur:
+     *  1) Move gets to the desired position
+     *  2) Driver stops the opmode running.
+     *
+     * @param speed      Target speed for forward motion.  Should allow for _/- variance for adjusting heading
+     * @param distance   Distance (in inches) to move from current position.  Negative distance means move backwards.
+     * @param angle      Absolute Angle (in Degrees) relative to last gyro reset.
+     *                   0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
+     *                   If a relative angle is required, add/subtract from current heading.
+     */
     public void gyroDrive ( double speed,
                             double distance,
                             double angle) throws InterruptedException {
@@ -233,7 +233,7 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
 
             // keep looping while we are still active, and BOTH motors are running.
             while (opModeIsActive() &&
-                   (robot.leftMotor.isBusy() && robot.rightMotor.isBusy())) {
+                    (robot.leftMotor.isBusy() && robot.rightMotor.isBusy())) {
 
                 // adjust relative speed based on heading error.
                 error = getError(angle);
@@ -261,7 +261,7 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
                 telemetry.addData("Err/St",  "%5.1f/%5.1f",  error, steer);
                 telemetry.addData("Target",  "%7d:%7d",      newLeftTarget,  newRightTarget);
                 telemetry.addData("Actual",  "%7d:%7d",      robot.leftMotor.getCurrentPosition(),
-                                                             robot.rightMotor.getCurrentPosition());
+                        robot.rightMotor.getCurrentPosition());
                 telemetry.addData("Speed",   "%5.2f:%5.2f",  leftSpeed, rightSpeed);
                 telemetry.update();
 
@@ -292,7 +292,7 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
      * @throws InterruptedException
      */
     public void gyroTurn (  double speed, double angle)
-                              throws InterruptedException {
+            throws InterruptedException {
 
         // keep looping while we are still active, and not on heading.
         while (opModeIsActive() && !onHeading(speed, angle, P_TURN_COEFF)) {
@@ -314,7 +314,7 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
      * @throws InterruptedException
      */
     public void gyroHold( double speed, double angle, double holdTime)
-                            throws InterruptedException {
+            throws InterruptedException {
 
         ElapsedTime holdTimer = new ElapsedTime();
 
@@ -409,6 +409,10 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
     //----------------------------------------------------------------------------------------------
     // Formatting
     //----------------------------------------------------------------------------------------------
+
+    public double angleDegrees(AngleUnit angleUnit, double angle) {
+        return AngleUnit.DEGREES.fromUnit(angleUnit, angle);
+    }
 
     String formatAngle(AngleUnit angleUnit, double angle) {
         return formatDegrees(AngleUnit.DEGREES.fromUnit(angleUnit, angle));

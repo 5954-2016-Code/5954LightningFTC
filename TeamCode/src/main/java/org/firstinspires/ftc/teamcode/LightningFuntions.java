@@ -6,6 +6,12 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+
+import java.util.Locale;
+
 /**
  * Created by ericw on 10/29/2016.
  */
@@ -52,13 +58,34 @@ public class LightningFuntions extends OpMode {
 
         // Chassis Sensor Init
         csChasis = hardwareMap.colorSensor.get("csChasis");
+
+        // Send telemetry message to alert driver that we are calibrating;
+        telemetry.addData(">", "Calibrating Gyro");    //
+        telemetry.update();
+
+        // make sure the gyro is calibrated before continuing
+        while (DriveSystem.imuChasis.isGyroCalibrated())  {
+            //These 2 lines work in LinearOpMode but
+            try {
+                Thread.sleep(50);
+            }
+            catch (InterruptedException ex) {
+                return; //If the sleep is interrupted by another thread then just quit?
+            }
+            Thread.yield(); //Yield to other threads while we wait for the gyro calibration to complete
+        }
+        telemetry.addData(">", "Robot Ready.");    //
+        telemetry.update();
+
         first_run = false;
     }
 
     @Override
     public void init_loop(){
-
-
+        if (DriveSystem.imuChasis.isGyroCalibrated()) {
+            telemetry.addData(">", "Robot Heading = %.1f", DriveSystem.getGyroAngle());
+            telemetry.update();
+        }
     }
 
     @Override
@@ -69,4 +96,10 @@ public class LightningFuntions extends OpMode {
     @Override
     public void loop() {
     }
+
+    public double angleDegrees(AngleUnit angleUnit, double angle) {
+        return AngleUnit.DEGREES.fromUnit(angleUnit, angle);
+    }
+
+
 }

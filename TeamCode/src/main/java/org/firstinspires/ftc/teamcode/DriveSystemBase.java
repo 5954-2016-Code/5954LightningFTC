@@ -1,12 +1,17 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.adafruit.BNO055IMU;
+import com.qualcomm.hardware.adafruit.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
@@ -20,7 +25,6 @@ public class DriveSystemBase {
             mDriveL2 = null,
             mDriveR1 = null,
             mDriveR2 = null;
-
 
     public BNO055IMU imuChasis = null;
 
@@ -39,6 +43,10 @@ public class DriveSystemBase {
     static final double     P_TURN_COEFF            = 0.0375; //Original: .1    // Larger is more responsive, but also less stable
     static final double     P_DRIVE_COEFF           = 0.07; //Original: 0.15;     // Larger is more responsive, but also less stable
 
+    // State used for updating telemetry
+    Orientation angles;
+    Orientation newAngles;
+
     public DriveSystemBase(){
     }
 
@@ -51,6 +59,21 @@ public class DriveSystemBase {
         mDriveL1.setDirection(DcMotorSimple.Direction.REVERSE);
         mDriveL2.setDirection(DcMotorSimple.Direction.REVERSE);
         imuChasis = HWMap.get(BNO055IMU.class, "imu");
+
+        // Set up the parameters with which we will use our IMU. Note that integration
+        // algorithm here just reports accelerations to the logcat log; it doesn't actually
+        // provide positional information.
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "AdafruitIMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled      = true;
+        parameters.loggingTag          = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+
+        imuChasis.initialize(parameters);
+        // Start the logging of measured acceleration
+        imuChasis.startAccelerationIntegration(new Position(), new Velocity(), 1000);
     }
 
     private double deadzone(double input){
@@ -123,5 +146,15 @@ public class DriveSystemBase {
             resetEncoders();
         }
         return l_return;
+    }
+
+    public double getGyroAngle()
+    {
+        angles   = imuChasis.getAngularOrientation().toAxesReference(AxesReference.INTRINSIC).toAxesOrder(AxesOrder.ZYX);
+        return angleDegrees(angles.angleUnit, angles.firstAngle);
+    }
+
+    public double angleDegrees(AngleUnit angleUnit, double angle) {
+        return AngleUnit.DEGREES.fromUnit(angleUnit, angle);
     }
 }
