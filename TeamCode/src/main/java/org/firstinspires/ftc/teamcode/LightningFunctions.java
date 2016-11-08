@@ -1,22 +1,20 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.adafruit.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-
-import java.util.Locale;
 
 /**
  * Created by ericw on 10/29/2016.
  */
 
-public class LightningFuntions extends OpMode {
+enum autonSteps {Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8, Step9, Step10 };
+
+public class LightningFunctions extends OpMode {
+    public autonSteps autonomousStep;
+
     DriveSystemBase DriveSystem = new DriveSystemBase();
     BallManagementSystem BallManagement = new BallManagementSystem();
     BallShooterSystem BallShooter = new BallShooterSystem();
@@ -49,7 +47,6 @@ public class LightningFuntions extends OpMode {
 
     @Override
     public void init() {
-
         DriveSystem.init(hardwareMap);
         BallManagement.init(hardwareMap);
         BallShooter.init(hardwareMap);
@@ -64,8 +61,8 @@ public class LightningFuntions extends OpMode {
         telemetry.update();
 
         // make sure the gyro is calibrated before continuing
+        //TODO: Add a timeout in case the gyro is not calibrating
         while (DriveSystem.imuChasis.isGyroCalibrated())  {
-            //These 2 lines work in LinearOpMode but
             try {
                 Thread.sleep(50);
             }
@@ -78,6 +75,7 @@ public class LightningFuntions extends OpMode {
         telemetry.update();
 
         first_run = false;
+        autonomousStep = autonSteps.Step1;
     }
 
     @Override
@@ -86,11 +84,11 @@ public class LightningFuntions extends OpMode {
             telemetry.addData(">", "Robot Heading = %.1f", DriveSystem.getGyroAngle());
             telemetry.update();
         }
+
     }
 
     @Override
     public void start(){
-
     }
 
     @Override

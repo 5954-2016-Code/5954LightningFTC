@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name = "Teleop - comp", group = "Test")
 
-public class LightningTeleop extends LightningFuntions {
+public class LightningTeleop extends LightningFunctions {
 
     @Override
     public void loop() {
