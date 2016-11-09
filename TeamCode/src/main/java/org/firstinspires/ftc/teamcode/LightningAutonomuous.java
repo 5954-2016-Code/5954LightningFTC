@@ -2,15 +2,54 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-/**
- * Created by ericw on 11/4/2016.
- */
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 
 @Autonomous(name = "Autonomous-comp", group = "Test")
 public class LightningAutonomuous extends LightningFunctions {
 
+    VisionSystem vision = new VisionSystem();
+    private static Color teamColor = Color.Red;
+    // hsvValues is an array that will hold the hue, saturation, and value information.
+    float hsvValues[] = {0F,0F,0F};
+
+    @Override
+    public void init()
+    {
+        super.init(); //perform all of the inits of the parent class
+        vision.init();
+        vision.startTracking(); //I guess this could be placed in the VisionSystem init?
+    }
+
     @Override
     public void loop() {
+        //Update and display position data to the selected teamColor image
+        //if it is actively targeted
+        //Change to tempColor.BLUE for blue team
+        if (vision.isTargetLocated(teamColor))
+        {
+            //This updates the location data from the robot to the target image
+            vision.updateLastLocation(teamColor);
+            telemetry.addData("Pos", vision.lastLocationToString());
+            telemetry.update();
+        }
+
+        //Sample of getting angles and distances from robot to target image
+        //TODO: We need to figure out which of these to use to get robot to the beacon
+        if (vision.isTargetLocated(teamColor) && vision.lastLocation != null)
+        {
+            float x_Angle = vision.get_xAngle();
+            float y_Angle = vision.get_yAngle();
+            float z_Angle = vision.get_zAngle();
+            float x_mm = vision.get_xMillimeters();
+            float y_mm = vision.get_yMillimeters();
+            float z_mm = vision.get_zMillimeters();
+        }
+
+        //Chasis Color Sensor -- Does alpha correspond to white?
+        if (this.csChasis.alpha() >=12)
+        {
+            //found white line?
+        }
 
         switch(autonomousStep)
         {

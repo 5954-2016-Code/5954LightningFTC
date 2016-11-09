@@ -22,7 +22,6 @@ import java.util.List;
  * Created by jimt on 10/29/2016.
  */
 
-enum teamColor {RED, BLUE};
 public class VisionSystem {
 
     public static final String TAG = "Vuforia Images";
@@ -132,7 +131,7 @@ public class VisionSystem {
                 .translation(mmBotWidth/2,0,0)
                 .multiplied(Orientation.getRotationMatrix(
                         AxesReference.EXTRINSIC, AxesOrder.YZY,
-                        AngleUnit.DEGREES, 0 /*-90*/, 0, 0));
+                        AngleUnit.DEGREES, 0 /*-90 for right hand side of robot*/, 0, 0));
         RobotLog.ii(TAG, "phone=%s", format(phoneLocationOnRobot));
 
         /**
@@ -149,9 +148,9 @@ public class VisionSystem {
         vortexImages.activate();
     }
 
-    public boolean isTargetLocated(teamColor tmColor)
+    public boolean isTargetLocated(Color teamColor)
     {
-        if (tmColor == teamColor.RED) {
+        if (teamColor == Color.Red) {
             return ((VuforiaTrackableDefaultListener)targetGears.getListener()).isVisible();
         }
         else //if (tmColor == teamColor.BLUE)
@@ -160,9 +159,9 @@ public class VisionSystem {
         }
     }
 
-    public OpenGLMatrix updateLastLocation(teamColor tmColor)
+    public OpenGLMatrix updateLastLocation(Color teamColor)
     {
-        if (tmColor == teamColor.RED)
+        if (teamColor == Color.Red)
         {
             robotLocationTransform = ((VuforiaTrackableDefaultListener)targetGears.getListener()).getUpdatedRobotLocation();
         }
@@ -211,11 +210,20 @@ public class VisionSystem {
         return lastTranslation.getData()[2];
     }
 
+    public String lastLocationToString()
+    {
+        if (lastLocation != null) {
+            //  RobotLog.vv(TAG, "robot=%s", format(lastLocation));
+            return format(lastLocation);
+        }
+        return "Unknown";
+    }
+
     /**
      * A simple utility that extracts positioning information from a transformation matrix
      * and formats it in a form palatable to a human being.
      */
-    String format(OpenGLMatrix transformationMatrix) {
+    public String format(OpenGLMatrix transformationMatrix) {
         return transformationMatrix.formatAsTransform();
     }
 
