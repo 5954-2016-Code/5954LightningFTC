@@ -10,7 +10,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
  * Created by ericw on 10/29/2016.
  */
 
-enum autonSteps {Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8, Step9, Step10 };
+enum autonSteps {Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8, Step9, Step10,
+                 Step11, Step12, Step13, Step14, Step15, Step16, Step17, Step18, Step19, Step20};
 
 public class LightningFunctions extends OpMode {
     public autonSteps autonomousStep;
@@ -41,6 +42,8 @@ public class LightningFunctions extends OpMode {
         period.reset();
     }
 
+    private ElapsedTime timeoutTimer;
+
     /********************************************************************
      * Overridden Functions
      */
@@ -56,23 +59,26 @@ public class LightningFunctions extends OpMode {
         // Chassis Sensor Init
         csChasis = hardwareMap.colorSensor.get("csChasis");
 
-        // Send telemetry message to alert driver that we are calibrating;
-        telemetry.addData(">", "Calibrating Gyro");    //
-        telemetry.update();
+//        // Send telemetry message to alert driver that we are calibrating;
+//        telemetry.addData(">", "Calibrating Gyro");    //
+//        telemetry.update();
 
         // make sure the gyro is calibrated before continuing
-        //TODO: Add a timeout in case the gyro is not calibrating
-        while (DriveSystem.imuChasis.isGyroCalibrated())  {
-            try {
-                Thread.sleep(50);
-            }
-            catch (InterruptedException ex) {
-                return; //If the sleep is interrupted by another thread then just quit?
-            }
-            Thread.yield(); //Yield to other threads while we wait for the gyro calibration to complete
-        }
-        telemetry.addData(">", "Robot Ready.");    //
-        telemetry.update();
+        //timeoutTimer = new ElapsedTime();
+        //timeoutTimer.reset();
+
+        //timeout if the gyro calibration takes more than 10 seconds
+//        while (DriveSystem.imuChasis.isGyroCalibrated())  {
+//            try {
+//                Thread.sleep(50);
+//            }
+//            catch (InterruptedException ex) {
+//                //Do nothing? or do we actually want to "return"
+//            }
+//            Thread.yield(); //Yield to other threads while we wait for the gyro calibration to complete
+//        }
+//        telemetry.addData(">", "Robot Ready.");    //
+//        telemetry.update();
 
         first_run = false;
         autonomousStep = autonSteps.Step1;
@@ -80,11 +86,10 @@ public class LightningFunctions extends OpMode {
 
     @Override
     public void init_loop(){
-        if (DriveSystem.imuChasis.isGyroCalibrated()) {
-            telemetry.addData(">", "Robot Heading = %.1f", DriveSystem.getGyroAngle());
-            telemetry.update();
-        }
-
+//        if (DriveSystem.imuChasis.isGyroCalibrated()) {
+//            telemetry.addData(">", "Robot Heading = %.1f", DriveSystem.getGyroAngle());
+//            telemetry.update();
+//        }
     }
 
     @Override

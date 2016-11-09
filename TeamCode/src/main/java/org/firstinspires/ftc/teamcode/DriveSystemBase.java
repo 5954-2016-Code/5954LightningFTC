@@ -71,9 +71,9 @@ public class DriveSystemBase {
         parameters.loggingTag          = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
-        imuChasis.initialize(parameters);
-        // Start the logging of measured acceleration
-        imuChasis.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+        //imuChasis.initialize(parameters);
+        //// Start the logging of measured acceleration
+        //imuChasis.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
         driveByGyroActive = false;
         turnByGyroActive = false;

@@ -33,7 +33,7 @@ public class LargeBallLiftSystem {
     }
     public void armDrive2(double Power)
     {
-        Power = Range.clip(-Power, -1, 1);
+        Power = Range.clip(Power, -1, 1);
         ArmDrive2.setPower(Power);
     }
 

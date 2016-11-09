@@ -5,6 +5,7 @@ import com.qualcomm.hardware.adafruit.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.Func;
@@ -124,6 +125,9 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
         // Start the logging of measured acceleration
         imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
+        robot.leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        robot.leftMotor2.setDirection(DcMotorSimple.Direction.REVERSE);
+
         // Ensure the robot it stationary, then reset the encoders and calibrate the gyro.
         robot.leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -167,7 +171,7 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
         // Put a hold after each turn
 
-        //gyroDrive(DRIVE_SPEED, 48, 0.0);  // Drive FWD 6 inches
+        gyroDrive(DRIVE_SPEED, 48, 0.0);  // Drive FWD 6 inches
         gyroTurn(TURN_SPEED, -45.0);        // Turn CW to 45 Degrees
         //gyroHold(TURN_SPEED, -45.0, 0.5);   // Hold 45 Deg heading for 1/2 second
 
@@ -230,6 +234,8 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
             speed = Range.clip(Math.abs(speed), 0.0, 1.0);
             robot.leftMotor.setPower(speed);
             robot.rightMotor.setPower(speed);
+            robot.leftMotor2.setPower(speed);
+            robot.rightMotor2.setPower(speed);
 
             // keep looping while we are still active, and BOTH motors are running.
             while (opModeIsActive() &&
@@ -256,6 +262,9 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
 
                 robot.leftMotor.setPower(leftSpeed);
                 robot.rightMotor.setPower(rightSpeed);
+                robot.leftMotor2.setPower(leftSpeed);
+                robot.rightMotor2.setPower(rightSpeed);
+
 
                 // Display drive status for the driver.
                 telemetry.addData("Err/St",  "%5.1f/%5.1f",  error, steer);
@@ -272,6 +281,8 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
             // Stop all motion;
             robot.leftMotor.setPower(0);
             robot.rightMotor.setPower(0);
+            robot.leftMotor2.setPower(0);
+            robot.rightMotor2.setPower(0);
 
             // Turn off RUN_TO_POSITION
             robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -330,6 +341,8 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
         // Stop all motion;
         robot.leftMotor.setPower(0);
         robot.rightMotor.setPower(0);
+        robot.leftMotor2.setPower(0);
+        robot.rightMotor2.setPower(0);
     }
 
     /**
@@ -367,6 +380,8 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
         // Send desired speeds to motors.
         robot.leftMotor.setPower(leftSpeed);
         robot.rightMotor.setPower(rightSpeed);
+        robot.leftMotor2.setPower(leftSpeed);
+        robot.rightMotor2.setPower(rightSpeed);
 
         // Display it for the driver.
         telemetry.addData("Target", "%5.2f", angle);

@@ -18,6 +18,7 @@ public class LightningTeleop extends LightningFunctions {
         this.ButtonPush.TeleopButtonPush(gamepad2.x, gamepad2.b);
         this.BallLift.operateClaw(gamepad2.a,gamepad2.y);
         this.BallManagement.Intake(gamepad2.left_bumper, (gamepad2.left_trigger >0.05));
+        this.BallManagement.Lift(gamepad2.right_bumper, (gamepad2.right_trigger >0.05));
 
         if (gamepad2.right_bumper) {
             this.BallShooter.ShootBall();
