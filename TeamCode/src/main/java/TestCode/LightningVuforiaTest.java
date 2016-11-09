@@ -214,38 +214,39 @@ public class LightningVuforiaTest extends LinearOpMode {
          * In a real situation we'd also account for the vertical (Z) offset of the target,
          * but for simplicity, we ignore that here; for a real robot, you'll want to fix that.
          *
-         * To place the Stones Target on the Red Audience wall:
+         * To place the Gears Target on the Red Audience wall:
          * - First we rotate it 90 around the field's X axis to flip it upright
          * - Then we rotate it  90 around the field's Z access to face it away from the audience.
          * - Finally, we translate it back along the X axis towards the red audience wall.
          */
         OpenGLMatrix redTargetLocationOnField = OpenGLMatrix
-                /* Then we translate the target off to the RED WALL. Our translation here
+                /* Then we translate the target off to the RED WALL to the Left of Red Driver Station Wall. Our translation here
                 is a negative translation in X.*/
                 //change from 1/2 to .41666666667--gears and .75--tools
-                .translation(-mmFTCFieldWidth/2, 0, 0)
+                .translation(-mmFTCFieldWidth/(float).41666666667, 0, 0)
                 .multiplied(Orientation.getRotationMatrix(
                         /* First, in the fixed (field) coordinate system, we rotate 90deg in X, then 90 in Z */
                         AxesReference.EXTRINSIC, AxesOrder.XZX,
                         AngleUnit.DEGREES, 90, 90, 0));
-        targetWheels.setLocation(redTargetLocationOnField);
+        targetGears.setLocation(redTargetLocationOnField);
         RobotLog.ii(TAG, "Red Target=%s", format(redTargetLocationOnField));
 
        /*
-        * To place the Stones Target on the Blue Audience wall:
+        * To place the Wheels Target on the Blue Audience wall:
         * - First we rotate it 90 around the field's X axis to flip it upright
         * - Finally, we translate it along the Y axis towards the blue audience wall.
         */
         OpenGLMatrix blueTargetLocationOnField = OpenGLMatrix
                 /* Then we translate the target off to the Blue Audience wall.
+                To the Right of the Blue Driver Station wall
                 Our translation here is a positive translation in Y.*/
                 //change from 1/2 to .41666666667--wheels and .75--legos
-                .translation(0, mmFTCFieldWidth/2, 0)
+                .translation(0, mmFTCFieldWidth/(float).41666666667, 0)
                 .multiplied(Orientation.getRotationMatrix(
                         /* First, in the fixed (field) coordinate system, we rotate 90deg in X */
                         AxesReference.EXTRINSIC, AxesOrder.XZX,
                         AngleUnit.DEGREES, 90, 0, 0));
-        targetTools.setLocation(blueTargetLocationOnField);
+        targetWheels.setLocation(blueTargetLocationOnField);
         RobotLog.ii(TAG, "Blue Target=%s", format(blueTargetLocationOnField));
 
         /**

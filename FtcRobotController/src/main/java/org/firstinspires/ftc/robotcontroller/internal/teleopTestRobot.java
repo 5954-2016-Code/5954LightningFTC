@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.robotcontroller.internal;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 /**
@@ -7,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
  * @author SPZ Productions
   */
 @TeleOp(name="TeleopTestRobot", group ="5954")
+@Disabled
 public class teleopTestRobot extends BaseFunctionsTestRobot {
 
     @Override
