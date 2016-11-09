@@ -28,6 +28,7 @@ public class DriveSystemBase {
             mDriveR2 = null;
 
     public BNO055IMU imuChasis = null;
+    BNO055IMU.Parameters parameters = null;
 
     static final double     COUNTS_PER_MOTOR_REV    = 1120; //(cpr): 1120 (280 rises of Channel A) // eg: TETRIX Motor Encoder: 1440
     static final double     DRIVE_GEAR_REDUCTION    = 1;   //2.0 ;     // This is < 1.0 if geared UP
@@ -63,7 +64,7 @@ public class DriveSystemBase {
         // Set up the parameters with which we will use our IMU. Note that integration
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
         // provide positional information.
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters = new BNO055IMU.Parameters();
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.calibrationDataFile = "AdafruitIMUCalibration.json"; // see the calibration sample opmode
@@ -71,6 +72,8 @@ public class DriveSystemBase {
         parameters.loggingTag          = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
+        //I moved these lines below to an init in LightningAutonomous.java so they would not interfere
+        //with normal teleop drive mode -- just keeping as a reference for now
         //imuChasis.initialize(parameters);
         //// Start the logging of measured acceleration
         //imuChasis.startAccelerationIntegration(new Position(), new Velocity(), 1000);

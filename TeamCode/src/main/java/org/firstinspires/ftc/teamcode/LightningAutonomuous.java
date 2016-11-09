@@ -3,14 +3,14 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 @Autonomous(name = "Autonomous-comp", group = "Test")
 public class LightningAutonomuous extends LightningFunctions {
 
     VisionSystem vision = new VisionSystem();
     private static Color teamColor = Color.Red;
-    // hsvValues is an array that will hold the hue, saturation, and value information.
-    float hsvValues[] = {0F,0F,0F};
 
     @Override
     public void init()
@@ -18,6 +18,40 @@ public class LightningAutonomuous extends LightningFunctions {
         super.init(); //perform all of the inits of the parent class
         vision.init();
         vision.startTracking(); //I guess this could be placed in the VisionSystem init?
+
+        //Comment these if Gyro won't initialize
+        this.DriveSystem.imuChasis.initialize(DriveSystem.parameters);
+        // Start the logging of measured acceleration
+        DriveSystem.imuChasis.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+
+        // Send telemetry message to alert driver that we are calibrating;
+        telemetry.addData(">", "Calibrating Gyro");    //
+        telemetry.update();
+
+        // make sure the gyro is calibrated before continuing
+        //timeoutTimer = new ElapsedTime();
+        //timeoutTimer.reset();
+
+        while (!DriveSystem.imuChasis.isGyroCalibrated())  {
+            try {
+                Thread.sleep(50);
+            }
+            catch (InterruptedException ex) {
+                //Do nothing? or do we actually want to "return"
+            }
+            //Thread.yield(); //Yield to other threads while we wait for the gyro calibration to complete
+        }
+        telemetry.addData(">", "Robot Ready.");    //
+        telemetry.update();
+    }
+
+    @Override
+    public void init_loop()
+    {
+        if (DriveSystem.imuChasis.isGyroCalibrated()) {
+            telemetry.addData(">", "Robot Heading = %.1f", DriveSystem.getGyroAngle());
+            telemetry.update();
+        }
     }
 
     @Override

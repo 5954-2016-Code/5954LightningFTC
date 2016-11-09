@@ -140,7 +140,7 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
 
         // make sure the gyro is calibrated before continuing
         //while (gyro.isCalibrating())  {
-        while (imu.isGyroCalibrated())  {
+        while (!imu.isGyroCalibrated())  {
             Thread.sleep(50);
             idle();
         }
