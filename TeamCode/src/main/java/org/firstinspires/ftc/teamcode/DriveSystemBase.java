@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -15,6 +16,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
+
+import java.util.Locale;
 
 /**
  * Created by ericw on 10/29/2016.
@@ -61,6 +64,9 @@ public class DriveSystemBase {
         mDriveL2.setDirection(DcMotorSimple.Direction.REVERSE);
         imuChasis = HWMap.get(BNO055IMU.class, "imu");
 
+    }
+
+    public void init_gyro(){
         // Set up the parameters with which we will use our IMU. Note that integration
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
         // provide positional information.
@@ -74,9 +80,9 @@ public class DriveSystemBase {
 
         //I moved these lines below to an init in LightningAutonomous.java so they would not interfere
         //with normal teleop drive mode -- just keeping as a reference for now
-        //imuChasis.initialize(parameters);
+        imuChasis.initialize(parameters);
         //// Start the logging of measured acceleration
-        //imuChasis.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+        imuChasis.startAccelerationIntegration(new Position(), new Velocity(), 1000);
 
         driveByGyroActive = false;
         turnByGyroActive = false;
@@ -111,7 +117,7 @@ public class DriveSystemBase {
         mDriveR1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    private void resetIMU_Position_Integration()
+    public void resetIMU_Position_Integration()
     {
         imuChasis.stopAccelerationIntegration();
         // Start the logging of measured acceleration
@@ -190,6 +196,16 @@ public class DriveSystemBase {
     private double distance;
     public boolean driveByGyroActive;
     public boolean turnByGyroActive;
+
+    /********************************
+     * Encoder Functions
+     */
+    public int getLeftMotorEncoderVal(){ return mDriveL1.getCurrentPosition();}
+    public int getRightMotorEncoderVal(){ return mDriveR1.getCurrentPosition();}
+    public void setLeftTargetPos(int target){mDriveL1.setTargetPosition(target);}
+    public void setRightTargetPos(int target){mDriveR1.setTargetPosition(target);}
+    public void runLeftMotorToPos(){mDriveL1.setMode(DcMotor.RunMode.RUN_TO_POSITION);}
+    public void runRightMotorToPos() {mDriveR1.setMode(DcMotor.RunMode.RUN_TO_POSITION);}
 
     public void setGyroDrive ( double desiredSpeed,
                             double desiredDistance,
@@ -402,5 +418,24 @@ public class DriveSystemBase {
     public double getSteer(double error, double PCoeff) {
         return Range.clip(error * PCoeff, -1, 1);
     }
+
+    //----------------------------------------------------------------------------------------------
+    // Formatting
+    //----------------------------------------------------------------------------------------------
+
+    String formatAngle(AngleUnit angleUnit, double angle) {
+        return formatDegrees(AngleUnit.DEGREES.fromUnit(angleUnit, angle));
+    }
+
+    String formatDegrees(double degrees){
+        return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
+        //return String.format("%.1f", AngleUnit.DEGREES.normalize(degrees));
+    }
+
+    /*********************************************************
+     * Gyro Drive
+     */
+
+
 
 }
