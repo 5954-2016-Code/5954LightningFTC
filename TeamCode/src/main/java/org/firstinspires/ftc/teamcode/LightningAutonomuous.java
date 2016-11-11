@@ -10,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 public class LightningAutonomuous extends LightningFunctions {
 
     VisionSystem vision = new VisionSystem();
-    private static Color teamColor = Color.Red;
+    private static ButtonPushSystem.BeaconColor teamColor = ButtonPushSystem.BeaconColor.Red;
 
     @Override
     public void init()
@@ -19,35 +19,43 @@ public class LightningAutonomuous extends LightningFunctions {
         vision.init();
         vision.startTracking(); //I guess this could be placed in the VisionSystem init?
 
-        //Comment these if Gyro won't initialize
-        this.DriveSystem.imuChasis.initialize(DriveSystem.parameters);
-        // Start the logging of measured acceleration
-        DriveSystem.imuChasis.startAccelerationIntegration(new Position(), new Velocity(), 1000);
-
         // Send telemetry message to alert driver that we are calibrating;
         telemetry.addData(">", "Calibrating Gyro");    //
         telemetry.update();
+
+        this.DriveSystem.imuChasis.initialize(DriveSystem.parameters);
 
         // make sure the gyro is calibrated before continuing
         //timeoutTimer = new ElapsedTime();
         //timeoutTimer.reset();
 
-        while (!DriveSystem.imuChasis.isGyroCalibrated())  {
-            try {
-                Thread.sleep(50);
-            }
-            catch (InterruptedException ex) {
-                //Do nothing? or do we actually want to "return"
-            }
-            //Thread.yield(); //Yield to other threads while we wait for the gyro calibration to complete
-        }
-        telemetry.addData(">", "Robot Ready.");    //
-        telemetry.update();
+//        while (!DriveSystem.imuChasis.isGyroCalibrated())  {
+//            try {
+//                Thread.sleep(50);
+//            }
+//            catch (InterruptedException ex) {
+//                //Do nothing? or do we actually want to "return"
+//            }
+//            //Thread.yield(); //Yield to other threads while we wait for the gyro calibration to complete
+//        }
+//        telemetry.addData(">", "Robot Ready.");    //
+//        telemetry.update();
     }
 
     @Override
     public void init_loop()
     {
+//        if (autonomousStep == autonSteps.Init1) {
+//            //Comment these if Gyro won't initialize
+//            this.DriveSystem.imuChasis.initialize(DriveSystem.parameters);
+//            autonomousStep = autonSteps.Init2;
+//        }
+//        else if (autonomousStep == autonSteps.Init2) {
+//            // Start the logging of measured acceleration
+//            this.DriveSystem.imuChasis.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+//            autonomousStep = autonSteps.Step1;
+//        }
+        Thread.yield();
         if (DriveSystem.imuChasis.isGyroCalibrated()) {
             telemetry.addData(">", "Robot Heading = %.1f", DriveSystem.getGyroAngle());
             telemetry.update();
@@ -79,11 +87,15 @@ public class LightningAutonomuous extends LightningFunctions {
             float z_mm = vision.get_zMillimeters();
         }
 
+
+
         //Chasis Color Sensor -- Does alpha correspond to white?
         if (this.csChasis.alpha() >=12)
         {
             //found white line?
         }
+
+
 
         switch(autonomousStep)
         {

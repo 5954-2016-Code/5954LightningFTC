@@ -148,9 +148,9 @@ public class VisionSystem {
         vortexImages.activate();
     }
 
-    public boolean isTargetLocated(Color teamColor)
+    public boolean isTargetLocated(ButtonPushSystem.BeaconColor teamColor)
     {
-        if (teamColor == Color.Red) {
+        if (teamColor == ButtonPushSystem.BeaconColor.Red) {
             return ((VuforiaTrackableDefaultListener)targetGears.getListener()).isVisible();
         }
         else //if (tmColor == teamColor.BLUE)
@@ -159,9 +159,9 @@ public class VisionSystem {
         }
     }
 
-    public OpenGLMatrix updateLastLocation(Color teamColor)
+    public OpenGLMatrix updateLastLocation(ButtonPushSystem.BeaconColor teamColor)
     {
-        if (teamColor == Color.Red)
+        if (teamColor == ButtonPushSystem.BeaconColor.Red)
         {
             robotLocationTransform = ((VuforiaTrackableDefaultListener)targetGears.getListener()).getUpdatedRobotLocation();
         }

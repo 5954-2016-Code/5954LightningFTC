@@ -10,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
  * Created by ericw on 10/29/2016.
  */
 
-enum autonSteps {Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8, Step9, Step10,
+enum autonSteps {Init1, Init2, Step1, Step2, Step3, Step4, Step5, Step6, Step7, Step8, Step9, Step10,
                  Step11, Step12, Step13, Step14, Step15, Step16, Step17, Step18, Step19, Step20};
 
 public class LightningFunctions extends OpMode {
@@ -60,7 +60,7 @@ public class LightningFunctions extends OpMode {
         csChasis = hardwareMap.colorSensor.get("csChasis");
 
         first_run = false;
-        autonomousStep = autonSteps.Step1;
+        autonomousStep = autonSteps.Init1;
     }
 
     @Override

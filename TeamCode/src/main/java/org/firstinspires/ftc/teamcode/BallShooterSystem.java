@@ -13,7 +13,7 @@ public class BallShooterSystem {
     private DcMotor  mShooterL = null,
                     mShooterR = null;
 
-    BallShooterSystem(){
+    public BallShooterSystem(){
 
     }
 

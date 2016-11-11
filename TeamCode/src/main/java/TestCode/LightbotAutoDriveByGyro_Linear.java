@@ -1,9 +1,12 @@
 package TestCode;
 
+import android.graphics.Color;
+
 import com.qualcomm.hardware.adafruit.BNO055IMU;
 import com.qualcomm.hardware.adafruit.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -16,10 +19,17 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
+import org.firstinspires.ftc.teamcode.BallManagementSystem;
+import org.firstinspires.ftc.teamcode.BallShooterSystem;
+import org.firstinspires.ftc.teamcode.ButtonPushSystem;
+import org.firstinspires.ftc.teamcode.DriveSystemBase;
+import org.firstinspires.ftc.teamcode.LargeBallLiftSystem;
 
 import java.util.Locale;
 
 import TestCode.HardwareLightbot;
+
+import static org.firstinspires.ftc.teamcode.ButtonPushSystem.BeaconColor.Blue;
 
 /**
  * This file illustrates the concept of driving a path based on Gyro heading and encoder counts.
@@ -64,6 +74,13 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
     HardwareLightbot robot   = new HardwareLightbot();   // Use Lightbot's hardware
     //ModernRobticsI2cGyro   gyro    = null;                    // Additional Gyro device
 
+    BallManagementSystem BallManagement = new BallManagementSystem();
+    BallShooterSystem BallShooter = new BallShooterSystem();
+    ButtonPushSystem ButtonPush = new ButtonPushSystem();
+    //DriveSystemBase DriveSystem = new DriveSystemBase();
+    LargeBallLiftSystem BallLift = new LargeBallLiftSystem();
+    public ColorSensor csChasis = null;
+
     // The Adafruit IMU sensor object
     BNO055IMU imu;
 
@@ -82,11 +99,11 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
     // These constants define the desired driving/control characteristics
     // The can/should be tweaked to suite the specific robot drive train.
     static final double     DRIVE_SPEED             = 0.7;     // Nominal speed for better accuracy.
-    static final double     TURN_SPEED              = 0.5;     // Nominal half speed for better accuracy.
+    static final double     TURN_SPEED              = 1; //0.5;     // Nominal half speed for better accuracy.
 
-    static final double     HEADING_THRESHOLD       = 0.5;  //Original: 1 ;      // As tight as we can make it with an integer gyro
-    static final double     P_TURN_COEFF            = 0.0375; //Original: .1    // Larger is more responsive, but also less stable
-    static final double     P_DRIVE_COEFF           = 0.07; //Original: 0.15;     // Larger is more responsive, but also less stable
+    static final double     HEADING_THRESHOLD       = 2;  //Original: 1 ;      // As tight as we can make it with an integer gyro
+    static final double     P_TURN_COEFF            = 0.005; //Original: .1    // Larger is more responsive, but also less stable
+    static final double     P_DRIVE_COEFF           = 0.03; //Original: 0.15;     // Larger is more responsive, but also less stable
 
     private void resetIMU_Position_Integration()
     {
@@ -104,6 +121,19 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
          */
         robot.init(hardwareMap);
         //gyro = (ModernRoboticsI2cGyro)hardwareMap.gyroSensor.get("gyro");
+
+        //DriveSystem.init(hardwareMap);
+        BallManagement.init(hardwareMap);
+        BallShooter.init(hardwareMap);
+        ButtonPush.init(hardwareMap);
+        BallLift.init(hardwareMap);
+        BallManagement.Intake(false, false);
+        BallManagement.Lift(false, false);
+        ButtonPush.FrontPushIn();
+        ButtonPush.RearPushIn();
+
+        // Chassis Sensor Init
+        csChasis = hardwareMap.colorSensor.get("csChasis");
 
         // Set up the parameters with which we will use our IMU. Note that integration
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
@@ -167,12 +197,82 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
         //gyro.resetZAxisIntegrator();
         resetIMU_Position_Integration();
 
+        BallLift.armDrive1(-1);
+        Thread.sleep(500);
+        BallLift.armDrive1(0);
+
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
         // Put a hold after each turn
 
-        gyroDrive(DRIVE_SPEED, 48, 0.0);  // Drive FWD 6 inches
-        gyroTurn(TURN_SPEED, -45.0);        // Turn CW to 45 Degrees
+        gyroDrive(DRIVE_SPEED, 44, 0.0);  // Drive FWD
+        Thread.sleep(750);
+
+        BallShooter.ShootBall();
+        Thread.sleep(500);
+
+        ElapsedTime holdTimer = new ElapsedTime();
+
+        // keep looping while we have time remaining.
+        holdTimer.reset();
+        while (opModeIsActive() && (holdTimer.time() < 4)) {  //2 seconds
+            BallManagement.Lift(true, false);
+            idle();
+        }
+
+        BallManagement.Lift(false, false);
+        BallShooter.StopShooter();
+
+
+        gyroDrive(DRIVE_SPEED, 44, 0.0);  // Drive FWD
+        Thread.sleep(750);
+
+        gyroTurn(TURN_SPEED, 45.0);        // Turn CW to 45 Degrees
+        Thread.sleep(750);
+
+        robot.leftMotor.setPower(.5);
+        robot.rightMotor.setPower(.5);
+        robot.leftMotor2.setPower(.5);
+        robot.rightMotor2.setPower(.5);
+        Thread.sleep(2000);
+        robot.leftMotor.setPower(0);
+        robot.rightMotor.setPower(0);
+        robot.leftMotor2.setPower(0);
+        robot.rightMotor2.setPower(0);
+
+        gyroDrive(DRIVE_SPEED, -3, 0.0);  // Drive FWD
+        Thread.sleep(750);
+        gyroTurn(TURN_SPEED, 130.0);        // Turn CW to 45 Degrees
+        Thread.sleep(100);
+        robot.leftMotor.setPower(.20);
+        robot.rightMotor.setPower(.20);
+        robot.leftMotor2.setPower(.20);
+        robot.rightMotor2.setPower(.20);
+
+        while(((csChasis.blue() + csChasis.red() + csChasis.green())/3) < 38)
+        {
+            Thread.sleep(2);
+        }
+        robot.leftMotor.setPower(0);
+        robot.rightMotor.setPower(0);
+        robot.leftMotor2.setPower(0);
+        robot.rightMotor2.setPower(0);
+
+        //Blue Team
+        if (ButtonPush.PollRearSensor() == Blue) {
+            ButtonPush.RearPushOut();
+        }
+        else
+        {
+            ButtonPush.FrontPushOut();
+        }
+        Thread.sleep(250);
+        ButtonPush.RearPushIn();
+        ButtonPush.FrontPushIn();
+
+
+//        gyroHold(DRIVE_SPEED, 45, 3);
+//        gyroDrive(DRIVE_SPEED, 6, 0);  // Drive FWD 6 inches
         //gyroHold(TURN_SPEED, -45.0, 0.5);   // Hold 45 Deg heading for 1/2 second
 
 //        gyroDrive(DRIVE_SPEED, 48.0, 0.0);    // Drive FWD 48 inches
@@ -265,14 +365,31 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
                 robot.leftMotor2.setPower(leftSpeed);
                 robot.rightMotor2.setPower(rightSpeed);
 
+                if (distance > 0)
+                {
+                    if (robot.leftMotor.getCurrentPosition() >= newLeftTarget)
+                    {
+                        // Stop all motion;
+                        robot.leftMotor.setPower(0);
+                        robot.rightMotor.setPower(0);
+                        robot.leftMotor2.setPower(0);
+                        robot.rightMotor2.setPower(0);
+
+                        // Turn off RUN_TO_POSITION
+                        robot.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                        robot.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                        break;
+                    }
+                }
 
                 // Display drive status for the driver.
                 telemetry.addData("Err/St",  "%5.1f/%5.1f",  error, steer);
                 telemetry.addData("Target",  "%7d:%7d",      newLeftTarget,  newRightTarget);
-                telemetry.addData("Actual",  "%7d:%7d",      robot.leftMotor.getCurrentPosition(),
+                telemetry.addData("ActualL",  "%7d:%7d",      robot.leftMotor.getCurrentPosition(),
                         robot.rightMotor.getCurrentPosition());
                 telemetry.addData("Speed",   "%5.2f:%5.2f",  leftSpeed, rightSpeed);
                 telemetry.update();
+
 
                 // Allow time for other processes to run.
                 idle();
@@ -379,8 +496,8 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
 
         // Send desired speeds to motors.
         robot.leftMotor.setPower(leftSpeed);
-        robot.rightMotor.setPower(rightSpeed);
         robot.leftMotor2.setPower(leftSpeed);
+        robot.rightMotor.setPower(rightSpeed);
         robot.rightMotor2.setPower(rightSpeed);
 
         // Display it for the driver.

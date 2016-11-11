@@ -2,15 +2,17 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * Created by ericw on 11/2/2016.
  */
 
-enum Color {Red, Blue, Other}
 
 public class ButtonPushSystem {
+    public enum BeaconColor {Red, Blue, Other}
+
     // Button Push System
     public Servo    sPushF = null,
                     sPushR = null;
@@ -26,10 +28,12 @@ public class ButtonPushSystem {
         sPushR = HWMap.servo.get("sPushR");
         sPushR.setDirection(Servo.Direction.REVERSE);
         csPushR = HWMap.colorSensor.get("csPushR");
+        csPushR.setI2cAddress(I2cAddr.create8bit(0x70) );
+        csPushR.enableLed(false);
     }
 
-    public Color PoleRearSensor(){
-        return (csPushR.blue() > csPushR.red() ? Color.Blue : Color.Red);
+    public BeaconColor PollRearSensor(){
+        return (csPushR.blue() > csPushR.red() ? BeaconColor.Blue : BeaconColor.Red);
     }
 
     public void FrontPushOut(){

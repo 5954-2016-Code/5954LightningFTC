@@ -11,7 +11,7 @@ public class BallManagementSystem {
     // Ball Management System
     public Servo    sBallIntake = null,
                     sBallLift = null;
-    BallManagementSystem(){
+    public BallManagementSystem(){
 
     }
 
