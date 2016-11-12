@@ -24,6 +24,7 @@ import org.firstinspires.ftc.teamcode.BallShooterSystem;
 import org.firstinspires.ftc.teamcode.ButtonPushSystem;
 import org.firstinspires.ftc.teamcode.DriveSystemBase;
 import org.firstinspires.ftc.teamcode.LargeBallLiftSystem;
+import org.firstinspires.ftc.teamcode.LightningColorSensor;
 
 import java.util.Locale;
 
@@ -66,9 +67,9 @@ import static org.firstinspires.ftc.teamcode.ButtonPushSystem.BeaconColor.Blue;
 
 //Modified to work with Adafruit IMU
 
-@Autonomous(name="Lightbot: Auto Drive By Adafruit", group="5954")
+@Autonomous(name="Blue: Auto Drive By Adafruit", group="5954")
 //@Disabled
-public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
+public class LightbotBlueAutoDriveByGyro_Linear extends LinearOpMode {
 
     /* Declare OpMode members. */
     HardwareLightbot robot   = new HardwareLightbot();   // Use Lightbot's hardware
@@ -80,6 +81,8 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
     //DriveSystemBase DriveSystem = new DriveSystemBase();
     LargeBallLiftSystem BallLift = new LargeBallLiftSystem();
     public ColorSensor csChasis = null;
+
+    //public LightningColorSensor testColorSensor = null;
 
     // The Adafruit IMU sensor object
     BNO055IMU imu;
@@ -134,6 +137,7 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
 
         // Chassis Sensor Init
         csChasis = hardwareMap.colorSensor.get("csChasis");
+        //testColorSensor = (LightningColorSensor)hardwareMap.colorSensor.get("csChasis");
 
         // Set up the parameters with which we will use our IMU. Note that integration
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
@@ -184,13 +188,7 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
         // Wait for the game to start (Display Gyro value), and reset gyro before we move..
         while (!isStarted()) {
             angles   = imu.getAngularOrientation().toAxesReference(AxesReference.INTRINSIC).toAxesOrder(AxesOrder.ZYX);
-            //telemetry.addData(">", "Robot Heading = %d", gyro.getIntegratedZValue());
             telemetry.addData(">", "Robot Heading = %.1f", angleDegrees(angles.angleUnit, angles.firstAngle));
-            telemetry.addData(">", "Robot Heading = %s", new Func<String>() {
-                @Override public String value() {
-                    return formatAngle(angles.angleUnit, angles.firstAngle);
-                }
-            });
             telemetry.update();
             idle();
         }
@@ -223,7 +221,6 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
         BallManagement.Lift(false, false);
         BallShooter.StopShooter();
 
-
         gyroDrive(DRIVE_SPEED, 44, 0.0);  // Drive FWD
         Thread.sleep(750);
 
@@ -243,15 +240,26 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
         gyroDrive(DRIVE_SPEED, -3, 0.0);  // Drive FWD
         Thread.sleep(750);
         gyroTurn(TURN_SPEED, 130.0);        // Turn CW to 45 Degrees
-        Thread.sleep(100);
+
+        //Try stopping the gyro to avoid any conflicts
+        //on the i2c bus with the color sensors
+        imu.stopAccelerationIntegration();
+        //Thread.sleep(100);
         robot.leftMotor.setPower(.20);
         robot.rightMotor.setPower(.20);
         robot.leftMotor2.setPower(.20);
         robot.rightMotor2.setPower(.20);
 
+        //For 8 inches more, turn left
+
+        telemetry.addData("FColor", "%3d:%3d:%3d", csChasis.red(), csChasis.green() , csChasis.blue());
         while(((csChasis.blue() + csChasis.red() + csChasis.green())/3) < 38)
         {
-            Thread.sleep(2);
+            telemetry.addData("FColor", "%3d:%3d:%3d", csChasis.red(), csChasis.green() , csChasis.blue());
+            telemetry.addData("BColor", "%3d:%3d:%3d", ButtonPush.csPushR.red(), ButtonPush.csPushR.green() , ButtonPush.csPushR.blue());
+            telemetry.update();
+            //Thread.sleep(2);
+            idle();
         }
         robot.leftMotor.setPower(0);
         robot.rightMotor.setPower(0);
@@ -259,6 +267,8 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
         robot.rightMotor2.setPower(0);
 
         //Blue Team
+//        telemetry.addData("BColor", "%3d:%3d:%3d", ButtonPush.csPushR.red(), ButtonPush.csPushR.green() + ButtonPush.csPushR.blue());
+//        telemetry.update();
         if (ButtonPush.PollRearSensor() == Blue) {
             ButtonPush.RearPushOut();
         }
@@ -269,7 +279,6 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
         Thread.sleep(250);
         ButtonPush.RearPushIn();
         ButtonPush.FrontPushIn();
-
 
 //        gyroHold(DRIVE_SPEED, 45, 3);
 //        gyroDrive(DRIVE_SPEED, 6, 0);  // Drive FWD 6 inches
@@ -388,8 +397,9 @@ public class LightbotAutoDriveByGyro_Linear extends LinearOpMode {
                 telemetry.addData("ActualL",  "%7d:%7d",      robot.leftMotor.getCurrentPosition(),
                         robot.rightMotor.getCurrentPosition());
                 telemetry.addData("Speed",   "%5.2f:%5.2f",  leftSpeed, rightSpeed);
+//                telemetry.addData("FColor", "%3d:%3d:%3d", csChasis.red(), csChasis.green() + csChasis.blue());
+//                telemetry.addData("BColor", "%3d:%3d:%3d", ButtonPush.csPushR.red(), ButtonPush.csPushR.green() + ButtonPush.csPushR.blue());
                 telemetry.update();
-
 
                 // Allow time for other processes to run.
                 idle();
