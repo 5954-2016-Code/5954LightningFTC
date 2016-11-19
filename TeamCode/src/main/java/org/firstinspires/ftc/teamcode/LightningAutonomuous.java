@@ -1,12 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
+//TODO: This was an attempt to perform Autonomous using standard OpMode
+//For now it takes too long to calibrate the gyro
 @Autonomous(name = "Autonomous-comp", group = "Test")
+@Disabled
 public class LightningAutonomuous extends LightningFunctions {
 
     VisionSystem vision = new VisionSystem();
@@ -69,14 +73,14 @@ public class LightningAutonomuous extends LightningFunctions {
         //Change to tempColor.BLUE for blue team
         if (vision.isTargetLocated(teamColor))
         {
-            //This updates the location data from the robot to the target image
+            //This updates the location data from the Motors to the target image
             vision.updateLastLocation(teamColor);
             telemetry.addData("Pos", vision.lastLocationToString());
             telemetry.update();
         }
 
-        //Sample of getting angles and distances from robot to target image
-        //TODO: We need to figure out which of these to use to get robot to the beacon
+        //Sample of getting angles and distances from Motors to target image
+        //TODO: We need to figure out which of these to use to get Motors to the beacon
         if (vision.isTargetLocated(teamColor) && vision.lastLocation != null)
         {
             float x_Angle = vision.get_xAngle();

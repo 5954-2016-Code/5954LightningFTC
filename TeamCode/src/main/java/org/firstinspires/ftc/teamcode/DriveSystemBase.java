@@ -40,7 +40,7 @@ public class DriveSystemBase {
             (WHEEL_DIAMETER_INCHES * 3.1415);
 
     // These constants define the desired driving/control characteristics
-    // The can/should be tweaked to suite the specific robot drive train.
+    // The can/should be tweaked to suite the specific Motors drive train.
     static final double     DRIVE_SPEED             = 0.7;     // Nominal speed for better accuracy.
     static final double     TURN_SPEED              = 0.5;     // Nominal half speed for better accuracy.
 
@@ -241,7 +241,7 @@ public class DriveSystemBase {
     //Returns true when encoder position reached
     public boolean runGyroDrive()
     {
-            // keep looping while we are still active, and BOTH motors are running.
+            // keep looping while we are still active, and BOTH Motors are running.
             if  (mDriveL1.isBusy() && mDriveR1.isBusy()) {
                 // adjust relative speed based on heading error.
                 error = getError(angle);
@@ -266,7 +266,7 @@ public class DriveSystemBase {
                 mDriveL2.setPower(leftSpeed);
                 mDriveR2.setPower(rightSpeed);
                 mDriveR2.setPower(rightSpeed);
-                return true; //true meaning the robot is still driving
+                return true; //true meaning the Motors is still driving
             }
             else {
                 // Stop all motion;
@@ -280,7 +280,7 @@ public class DriveSystemBase {
                 mDriveL2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 driveByGyroActive = false;
             }
-            return false; //false meaning the robot has stopped
+            return false; //false meaning the Motors has stopped
     }
 
     /**
@@ -301,12 +301,12 @@ public class DriveSystemBase {
         // keep looping while we are still active, and not on heading.
         if (onHeading(desiredSpeed, desiredAngle, P_TURN_COEFF)) {
             turnByGyroActive = false;
-            return false; //false meaning the robot is no longer turning
+            return false; //false meaning the Motors is no longer turning
         }
         else
         {
             turnByGyroActive = true;
-            return true; //true meaning the robot is still turning
+            return true; //true meaning the Motors is still turning
         }
     }
 
@@ -336,7 +336,7 @@ public class DriveSystemBase {
         if(holdTimer.time() < desiredHoldTime) {
             onHeading(desiredSpeed, desiredAngle, P_TURN_COEFF);
             turnByGyroActive = true;
-            return true; //true meaning the robot is still turning/desired time has not elapsed
+            return true; //true meaning the Motors is still turning/desired time has not elapsed
         }
 
         // Stop all motion;
@@ -345,7 +345,7 @@ public class DriveSystemBase {
         mDriveR1.setPower(0);
         mDriveR2.setPower(0);
         turnByGyroActive = false;
-        return false; //false meaning the robot is done turning/desired time elapsed
+        return false; //false meaning the Motors is done turning/desired time elapsed
     }
 
     /**
@@ -380,7 +380,7 @@ public class DriveSystemBase {
             leftSpeed   = -rightSpeed;
         }
 
-        // Send desired speeds to motors.
+        // Send desired speeds to Motors.
         mDriveL1.setPower(leftSpeed);
         mDriveL2.setPower(leftSpeed);
         mDriveR1.setPower(rightSpeed);
@@ -391,10 +391,10 @@ public class DriveSystemBase {
 
 
     /**
-     * getError determines the error between the target angle and the robot's current heading
+     * getError determines the error between the target angle and the Motors's current heading
      * @param   targetAngle  Desired angle (relative to global reference established at last Gyro Reset).
-     * @return  error angle: Degrees in the range +/- 180. Centered on the robot's frame of reference
-     *          +ve error means the robot should turn LEFT (CCW) to reduce error.
+     * @return  error angle: Degrees in the range +/- 180. Centered on the Motors's frame of reference
+     *          +ve error means the Motors should turn LEFT (CCW) to reduce error.
      */
     public double getError(double targetAngle) {
 
@@ -411,7 +411,7 @@ public class DriveSystemBase {
 
     /**
      * returns desired steering force.  +/- 1 range.  +ve = steer left
-     * @param error   Error angle in robot relative degrees
+     * @param error   Error angle in Motors relative degrees
      * @param PCoeff  Proportional Gain Coefficient
      * @return
      */

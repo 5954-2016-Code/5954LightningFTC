@@ -19,7 +19,7 @@ public class ButtonPushSystem {
 
     public ColorSensor  csPushR = null;
 
-    static final double downPosition = .75f,
+    static final double downPosition = 1.0f,
                         upPosition =  -.75f;
 
     public void init(HardwareMap HWMap) {
@@ -37,11 +37,11 @@ public class ButtonPushSystem {
     }
 
     public void FrontPushOut(){
-        sPushF.setPosition(downPosition);
+        sPushF.setPosition(1);
     }
 
     public  void FrontPushIn(){
-        sPushF.setPosition(upPosition);
+        sPushF.setPosition(0);
     }
 
     public void RearPushOut(){

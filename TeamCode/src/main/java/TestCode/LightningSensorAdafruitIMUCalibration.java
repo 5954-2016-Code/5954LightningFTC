@@ -109,7 +109,7 @@ public class LightningSensorAdafruitIMUCalibration extends LinearOpMode
     // State
     //----------------------------------------------------------------------------------------------
 
-    // Our sensors, motors, and other devices go here, along with other long term state
+    // Our sensors, Motors, and other devices go here, along with other long term state
     BNO055IMU imu;
 
     // State used for updating telemetry
@@ -160,7 +160,7 @@ public class LightningSensorAdafruitIMUCalibration extends LinearOpMode
                 // Save the calibration data to a file. You can choose whatever file
                 // name you wish here, but you'll want to indicate the same file name
                 // when you initialize the IMU in an opmode in which it is used. If you
-                // have more than one IMU on your robot, you'll of course want to use
+                // have more than one IMU on your Motors, you'll of course want to use
                 // different configuration file names for each.
                 String filename = "AdafruitIMUCalibration.json";
                 File file = AppUtil.getInstance().getSettingsFile(filename);

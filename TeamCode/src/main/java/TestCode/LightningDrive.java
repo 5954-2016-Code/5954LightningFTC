@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Motor channel:  Left  drive motor:        "left_drive"
  * Motor channel:  Right drive motor:        "right_drive"
  */
-public class HardwareLightbot
+public class LightningDrive
 {
     /* Public OpMode members. */
     public DcMotor  leftMotor   = null;
@@ -24,7 +24,7 @@ public class HardwareLightbot
     private ElapsedTime period  = new ElapsedTime();
 
     /* Constructor */
-    public HardwareLightbot(){
+    public LightningDrive(){
 
     }
 
@@ -38,18 +38,18 @@ public class HardwareLightbot
         leftMotor  = hwMap.dcMotor.get("mDriveR1");
         rightMotor2   = hwMap.dcMotor.get("mDriveL2");
         leftMotor2  = hwMap.dcMotor.get("mDriveR2");
-        leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        rightMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
-        leftMotor2.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        rightMotor2.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark motors
+        leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark Motors
+        rightMotor.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark Motors
+        leftMotor2.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark Motors
+        rightMotor2.setDirection(DcMotor.Direction.REVERSE);// Set to FORWARD if using AndyMark Motors
 
-        // Set all motors to zero power
+        // Set all Motors to zero power
         leftMotor.setPower(0);
         rightMotor.setPower(0);
         leftMotor2.setPower(0);
         rightMotor2.setPower(0);
 
-        // Set all motors to run without encoders.
+        // Set all Motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
         leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

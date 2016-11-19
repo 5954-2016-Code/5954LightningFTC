@@ -2,9 +2,13 @@ package TestCode;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.provider.CalendarContract;
 import android.view.View;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.I2cAddr;
 
 import org.firstinspires.ftc.teamcode.LightningColorSensor;
 import org.firstinspires.ftc.teamcode.R;
@@ -12,9 +16,11 @@ import org.firstinspires.ftc.teamcode.R;
 /**
  * Created by jwthane on 11/11/2016.
  */
+@TeleOp(name = "Color# Test", group = "Test")
 
 public class SensorMRColor extends LinearOpMode {
 
+    ColorSensor tempCs;
     LightningColorSensor colorSensor;    // Hardware Device Object
 
     @Override
@@ -25,6 +31,8 @@ public class SensorMRColor extends LinearOpMode {
 
         // values is a reference to the hsvValues array.
         final float values[] = hsvValues;
+
+
 
         // get a reference to the RelativeLayout so we can change the background
         // color of the Robot Controller app to match the hue detected by the RGB sensor.
@@ -37,8 +45,11 @@ public class SensorMRColor extends LinearOpMode {
         // bLedOn represents the state of the LED.
         boolean bLedOn = true;
 
+
         // get a reference to our ColorSensor object.
-        colorSensor = (LightningColorSensor)hardwareMap.colorSensor.get("sensor_color");
+        tempCs = hardwareMap.colorSensor.get("csPushR");
+        colorSensor.setI2cAddress(I2cAddr.create8bit(0x70));
+        colorSensor.enableLed(false);
 
         // Set the LED in the beginning
         colorSensor.enableLed(bLedOn);

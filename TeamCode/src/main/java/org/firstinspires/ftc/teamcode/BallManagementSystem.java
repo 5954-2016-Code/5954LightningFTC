@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
@@ -11,6 +13,9 @@ public class BallManagementSystem {
     // Ball Management System
     public Servo    sBallIntake = null,
                     sBallLift = null;
+
+    public OpticalDistanceSensor dBallIntake = null;
+
     public BallManagementSystem(){
 
     }
@@ -19,6 +24,7 @@ public class BallManagementSystem {
         // Ball Management System Init
         sBallIntake = HWMap.servo.get("sBallIntake");
         sBallLift = HWMap.servo.get("sBallLift");
+        dBallIntake = HWMap.opticalDistanceSensor.get("dBallIntake");
     }
 
     private void IntakePower(double power){
@@ -52,5 +58,14 @@ public class BallManagementSystem {
         }
     }
 
-
+    public boolean isBallDetected()
+    {
+        //getLightDetected takes the 0 to 5 volts and converts it to 0 to 1 volts
+        //TODO:  Adjust the 0.1 once we get the sensor on the Motors
+        if (dBallIntake.getLightDetected() <= 0.1)
+        {
+            return true;
+        }
+        return false;
+    }
 }

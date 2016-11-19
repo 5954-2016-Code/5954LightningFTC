@@ -105,7 +105,7 @@ public class LightningAutoBlue extends LinearOpMode {
 
             DriveSystem.ArcadeDrive(speed,0);
 
-            // keep looping while we are still active, and BOTH motors are running.
+            // keep looping while we are still active, and BOTH Motors are running.
             while (opModeIsActive() &&
                     (DriveSystem.mDriveL1.isBusy() && DriveSystem.mDriveR1.isBusy())) {
 

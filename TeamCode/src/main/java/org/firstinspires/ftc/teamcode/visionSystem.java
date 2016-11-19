@@ -47,7 +47,7 @@ public class VisionSystem {
      * target configuration files *must* correspond for the math to work out correctly.
      */
     float mmPerInch        = 25.4f;
-    float mmBotWidth       = 18 * mmPerInch;            // ... or whatever is right for your robot
+    float mmBotWidth       = 18 * mmPerInch;            // ... or whatever is right for your Motors
     float mmFTCFieldWidth  = (12*12 - 2) * mmPerInch;   // the FTC field is ~11'10" center-to-center of the glass panels
 
     public VisionSystem(){
@@ -114,10 +114,10 @@ public class VisionSystem {
         RobotLog.ii(TAG, "Blue Target=%s", format(blueTargetLocationOnField));
 
         /**
-         * Create a transformation matrix describing where the phone is on the robot. Here, we
-         * put the phone on the right hand side of the robot with the screen facing in (see our
+         * Create a transformation matrix describing where the phone is on the Motors. Here, we
+         * put the phone on the right hand side of the Motors with the screen facing in (see our
          * choice of BACK camera above) and in landscape mode. Starting from alignment between the
-         * robot's and phone's axes, this is a rotation of -90deg along the Y axis.
+         * Motors's and phone's axes, this is a rotation of -90deg along the Y axis.
          *
          * When determining whether a rotation is positive or negative, consider yourself as looking
          * down the (positive) axis of rotation from the positive towards the origin. Positive rotations
@@ -131,7 +131,7 @@ public class VisionSystem {
                 .translation(mmBotWidth/2,0,0)
                 .multiplied(Orientation.getRotationMatrix(
                         AxesReference.EXTRINSIC, AxesOrder.YZY,
-                        AngleUnit.DEGREES, 0 /*-90 for right hand side of robot*/, 0, 0));
+                        AngleUnit.DEGREES, 0 /*-90 for right hand side of Motors*/, 0, 0));
         RobotLog.ii(TAG, "phone=%s", format(phoneLocationOnRobot));
 
         /**
@@ -213,7 +213,7 @@ public class VisionSystem {
     public String lastLocationToString()
     {
         if (lastLocation != null) {
-            //  RobotLog.vv(TAG, "robot=%s", format(lastLocation));
+            //  RobotLog.vv(TAG, "Motors=%s", format(lastLocation));
             return format(lastLocation);
         }
         return "Unknown";
