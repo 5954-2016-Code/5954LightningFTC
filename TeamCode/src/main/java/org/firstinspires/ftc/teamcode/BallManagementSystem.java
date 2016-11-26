@@ -15,6 +15,7 @@ public class BallManagementSystem {
                     sBallLift = null;
 
     public OpticalDistanceSensor dBallIntake = null;
+    public double currentDistanceValue = 0;
 
     public BallManagementSystem(){
 
@@ -35,7 +36,7 @@ public class BallManagementSystem {
     }
 
     public void Intake(boolean In, boolean Out){
-        if (In){
+        if (In || isBallDetected()){
             IntakePower(1);
         }
         else if (Out){
@@ -62,7 +63,8 @@ public class BallManagementSystem {
     {
         //getLightDetected takes the 0 to 5 volts and converts it to 0 to 1 volts
         //TODO:  Adjust the 0.1 once we get the sensor on the Motors
-        if (dBallIntake.getLightDetected() <= 0.1)
+        currentDistanceValue = dBallIntake.getLightDetected();
+        if (currentDistanceValue <= 0.1)
         {
             return true;
         }
