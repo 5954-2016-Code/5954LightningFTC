@@ -16,7 +16,7 @@ public class LargeBallLiftSystem {
     public DcMotor ArmDrive2 = null;
 
     public Servo sLiftClaw = null;
-    //TODO: public Servo sClaw2 = null;
+    Servo sClaw2 = null;
 
     private static final double servoMidpoint = 0.5,
                                 servoMovement = 0.5;
@@ -27,7 +27,8 @@ public class LargeBallLiftSystem {
         ArmDrive1.setDirection(DcMotorSimple.Direction.REVERSE);
 
         sLiftClaw = HWMap.servo.get("sLiftClaw");
-        //TODO: sClaw2 = HWMap.servo.get("sClaw2");
+        sLiftClaw.setDirection(Servo.Direction.REVERSE);
+        sClaw2 = HWMap.servo.get("sClaw2");
     }
 
     public void armDrive1(double Power)
@@ -44,6 +45,6 @@ public class LargeBallLiftSystem {
 
     public void operateClaw(boolean open, boolean close){
         sLiftClaw.setPosition(servoMidpoint + (open?servoMovement:0) - (close?servoMovement:0));
-
+        sClaw2.setPosition(servoMidpoint + (open?servoMovement:0) - (close?servoMovement:0));
     }
 }

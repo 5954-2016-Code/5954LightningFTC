@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * Created by ericw on 11/2/2016.
@@ -17,6 +18,8 @@ public class BallManagementSystem {
     public OpticalDistanceSensor dBallIntake = null;
     public double currentDistanceValue = 0;
 
+    ElapsedTime holdTimerIntakeHold = new ElapsedTime();
+
     public BallManagementSystem(){
 
     }
@@ -26,6 +29,8 @@ public class BallManagementSystem {
         sBallIntake = HWMap.servo.get("sBallIntake");
         sBallLift = HWMap.servo.get("sBallLift");
         dBallIntake = HWMap.opticalDistanceSensor.get("dBallIntake");
+        dBallIntake.enableLed(true);
+        holdTimerIntakeHold.reset();
     }
 
     private void IntakePower(double power){
@@ -36,7 +41,7 @@ public class BallManagementSystem {
     }
 
     public void Intake(boolean In, boolean Out){
-        if (In || isBallDetected()){
+        if (In){
             IntakePower(1);
         }
         else if (Out){
@@ -48,11 +53,11 @@ public class BallManagementSystem {
     }
 
     public void Lift(boolean Up, boolean Down){
-        if (Up){
-            LiftPower(1);
+        if (Up /*|| isBallDetected()*/){
+            LiftPower(-1);
         }
         else if (Down){
-            LiftPower(-1);
+            LiftPower(1);
         }
         else{
             LiftPower(0);
@@ -61,13 +66,17 @@ public class BallManagementSystem {
 
     public boolean isBallDetected()
     {
-        //getLightDetected takes the 0 to 5 volts and converts it to 0 to 1 volts
-        //TODO:  Adjust the 0.1 once we get the sensor on the Motors
         currentDistanceValue = dBallIntake.getLightDetected();
-        if (currentDistanceValue <= 0.1)
+        if (currentDistanceValue > 0.25)
+        {
+            holdTimerIntakeHold.reset();
+            return true;
+        }
+        else if (holdTimerIntakeHold.seconds() < 1)
         {
             return true;
         }
+
         return false;
     }
 }

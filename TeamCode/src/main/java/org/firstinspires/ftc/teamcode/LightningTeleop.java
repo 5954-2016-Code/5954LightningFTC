@@ -26,6 +26,8 @@ public class LightningTeleop extends LightningFunctions {
             this.BallShooter.StopShooter();
         }
 
+        //BallManagement.isBallDetected();
+
         telemetry.addData(">", "Distance = %.1f", BallManagement.currentDistanceValue);
         telemetry.update();
     }
