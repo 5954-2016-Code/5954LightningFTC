@@ -3,6 +3,7 @@ package TestCode;
 import com.qualcomm.hardware.adafruit.BNO055IMU;
 import com.qualcomm.hardware.adafruit.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -25,7 +26,7 @@ import java.util.Locale;
 
 //Modified to work with Adafruit IMU
 @Autonomous(name="Blue Beacon: Auto Drive", group="5954")
-//@Disabled
+@Disabled
 public class LightbotBlueAutoDriveByGyro_Linear extends LightningAutonomousBaseOpmode{
     @Override
     public void runOpMode() throws InterruptedException {

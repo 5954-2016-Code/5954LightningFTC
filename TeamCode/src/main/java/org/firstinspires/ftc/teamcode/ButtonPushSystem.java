@@ -41,7 +41,7 @@ public class ButtonPushSystem {
     }
 
     public  void FrontPushIn(){
-        sPushF.setPosition(0);
+        sPushF.setPosition(0.1);
     }
 
     public void RearPushOut(){

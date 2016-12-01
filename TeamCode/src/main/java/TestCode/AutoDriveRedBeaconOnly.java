@@ -66,28 +66,42 @@ public class AutoDriveRedBeaconOnly extends LightningAutonomousBaseOpmode {
     public void runOpMode() throws InterruptedException {
         initHardware(); //Performs all off the initialization+gyro calibration in the base class
 
-        gyroDrive(DRIVE_SPEED, 32, 0.0);  // Drive FWD
-        Thread.sleep(250);
+//        imu.stopAccelerationIntegration();
+//
+//        //Red Team
+//        telemetry.addData("BColor", "%3d:%3d", ButtonPush.csPushR.red(), ButtonPush.csPushR.blue());
+//        while(ButtonPush.csPushR.red() > 200)
+//        {
+//            //telemetry.addData("FColor", "%3d:%3d", csChasis.red(), csChasis.green() , csChasis.blue());
+//            telemetry.addData("BColor", "%3d:%3d", ButtonPush.csPushR.red(), ButtonPush.csPushR.blue());
+//            telemetry.update();
+//            //Thread.sleep(2);
+//            idle();
+//        }
 
         ButtonPush.FrontPushOut();
 
+        gyroDrive(DRIVE_SPEED, 38, 0.0);  // Drive FWD
+        Thread.sleep(250);
+
         //Right Turn -- Note: Left and Right motors appear to be swapped for turning
         Motors.leftMotor.setPower(.25);
-        Motors.rightMotor.setPower(.4);
+        Motors.rightMotor.setPower(.7);
         Motors.leftMotor2.setPower(.25);
-        Motors.rightMotor2.setPower(.4);
+        Motors.rightMotor2.setPower(.7);
 
-        //while gyro is reading less than X
-        double currentError = 0;
-        do {
-            currentError = getError(0);
-
-//            newAngles  = imu.getAngularOrientation().toAxesReference(AxesReference.INTRINSIC).toAxesOrder(AxesOrder.ZYX);
-//            currentAngle =  AngleUnit.DEGREES.fromUnit(newAngles.angleUnit, newAngles.firstAngle);
-            telemetry.addData(">", "Robot Error = %.1f", currentError);
-            telemetry.update();
-            idle();
-        } while(Math.abs(currentError) < 25);
+        Thread.sleep(750);
+//        //while gyro is reading less than X
+//        double currentError = 0;
+//        do {
+//            currentError = getError(0);
+//
+////            newAngles  = imu.getAngularOrientation().toAxesReference(AxesReference.INTRINSIC).toAxesOrder(AxesOrder.ZYX);
+////            currentAngle =  AngleUnit.DEGREES.fromUnit(newAngles.angleUnit, newAngles.firstAngle);
+//            telemetry.addData(">", "Robot Error = %.1f", currentError);
+//            telemetry.update();
+//            idle();
+//        } while(Math.abs(currentError) < 25);
 
         //bias towards the left a little bit
         Motors.leftMotor.setPower(.3);
@@ -95,12 +109,7 @@ public class AutoDriveRedBeaconOnly extends LightningAutonomousBaseOpmode {
         Motors.leftMotor2.setPower(.3);
         Motors.rightMotor2.setPower(.25);
 
-        Thread.sleep(1500);
-
-        Motors.leftMotor.setPower(-.3);
-        Motors.rightMotor.setPower(-.25);
-        Motors.leftMotor2.setPower(-.3);
-        Motors.rightMotor2.setPower(-.25);
+        Thread.sleep(2000);
 
         //Try stopping the gyro to avoid any conflicts
         //on the i2c bus with the color sensors
@@ -110,6 +119,11 @@ public class AutoDriveRedBeaconOnly extends LightningAutonomousBaseOpmode {
             idle();
         }
         Thread.sleep(100);
+
+        Motors.leftMotor.setPower(-.25);
+        Motors.rightMotor.setPower(-.20);
+        Motors.leftMotor2.setPower(-.25);
+        Motors.rightMotor2.setPower(-.20);
 
         //Red Team
         telemetry.addData("BColor", "%3d:%3d", ButtonPush.csPushR.red(), ButtonPush.csPushR.blue());
@@ -140,8 +154,10 @@ public class AutoDriveRedBeaconOnly extends LightningAutonomousBaseOpmode {
         Motors.leftMotor2.setPower(.3);
         Motors.rightMotor2.setPower(.25);
 
+        Thread.sleep(1500);
+
         //Red Team
-        telemetry.addData("BColor", "%3d:%3d", ButtonPush.csPushR.red(), ButtonPush.csPushR.blue());
+        //telemetry.addData("BColor", "%3d:%3d", ButtonPush.csPushR.red(), ButtonPush.csPushR.blue());
         while(ButtonPush.csPushR.red() < 10)
         {
             //telemetry.addData("FColor", "%3d:%3d", csChasis.red(), csChasis.green() , csChasis.blue());
@@ -161,6 +177,31 @@ public class AutoDriveRedBeaconOnly extends LightningAutonomousBaseOpmode {
         Thread.sleep(1500);
         ButtonPush.RearPushIn();
         ButtonPush.FrontPushIn();
+
+//        // Start the logging of measured acceleration
+//        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+//        Thread.sleep(100);
+
+
+        //TODO: Try -.5 instead of -.7
+        Motors.leftMotor.setPower(-.25);
+        Motors.rightMotor.setPower(-.7);
+        Motors.leftMotor2.setPower(-.25);
+        Motors.rightMotor2.setPower(-.7);
+
+        Thread.sleep(250);
+
+        Motors.leftMotor.setPower(-.5);
+        Motors.rightMotor.setPower(-.5);
+        Motors.leftMotor2.setPower(-.5);
+        Motors.rightMotor2.setPower(-.5);
+
+        Thread.sleep(4000);
+
+        Motors.leftMotor.setPower(0);
+        Motors.rightMotor.setPower(0);
+        Motors.leftMotor2.setPower(0);
+        Motors.rightMotor2.setPower(0);
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
