@@ -68,28 +68,70 @@ public class AutoDriveBlueBeaconOnly extends LightningAutonomousBaseOpmode {
 
         ButtonPush.FrontPushOut();
 
-        //gyroDrive(DRIVE_SPEED, -96, 0.0);  // Drive RWD
+        //TODO: Time this out so that we don't cross the line before 10 seconds have passed
+
+        //TODO: Test if this will work with target 180 degrees?
+        //It doesn't like to drive backward with gyroDrive--it tries to turn around
+        //gyroDrive(DRIVE_SPEED, -24 /*-96*/, 180);  // Drive RWD
         //
 
-        Motors.leftMotor.setPower(-.5);
-        Motors.rightMotor.setPower(-.5);
-        Motors.leftMotor2.setPower(-.5);
-        Motors.rightMotor2.setPower(-.5);
-        Thread.sleep(5000);
+//        //This is a possible way to track time
+//        while (this.getRuntime() < 2)
+//        {
+//            idle();
+//        }
+
+        //TODO: Could use Arcade Drive to bias this section
+        Motors.leftMotor.setPower(-1.0);
+        Motors.rightMotor.setPower(-1.0);
+        Motors.leftMotor2.setPower(-1.0);
+        Motors.rightMotor2.setPower(-1.0);
+        Thread.sleep(500);
+        //Thread.sleep(3300);
+
+        Motors.leftMotor.setPower(0);
+        Motors.rightMotor.setPower(0);
+        Motors.leftMotor2.setPower(0);
+        Motors.rightMotor2.setPower(0);
+        Thread.sleep(100);
+        //Thread.sleep(7000);
+
+        Motors.leftMotor.setPower(-.7);
+        Motors.rightMotor.setPower(-.25);
+        Motors.leftMotor2.setPower(-.7);
+        Motors.rightMotor2.setPower(-.25);
+        Thread.sleep(640);
+
+        Motors.leftMotor.setPower(-1.0);
+        Motors.rightMotor.setPower(-1.0);
+        Motors.leftMotor2.setPower(-1.0);
+        Motors.rightMotor2.setPower(-1.0);
+        Thread.sleep(2300);
+
+        Motors.leftMotor.setPower(0);
+        Motors.rightMotor.setPower(0);
+        Motors.leftMotor2.setPower(0);
+        Motors.rightMotor2.setPower(0);
+        Thread.sleep(7000);
+
+        Motors.leftMotor.setPower(-0.5);
+        Motors.rightMotor.setPower(-0.7);
+        Motors.leftMotor2.setPower(-0.5);
+        Motors.rightMotor2.setPower(-0.7);
+        Thread.sleep(1500);
 
         //Left Turn -- Note: Left and Right motors appear to be swapped for turning
         Motors.leftMotor.setPower(-.25);
         Motors.rightMotor.setPower(-.7);
         Motors.leftMotor2.setPower(-.25);
         Motors.rightMotor2.setPower(-.7);
-
         Thread.sleep(250);
 
         //bias towards the left a little bit
-        Motors.leftMotor.setPower(.25);
-        Motors.rightMotor.setPower(.25);
-        Motors.leftMotor2.setPower(.25);
-        Motors.rightMotor2.setPower(.25);
+        Motors.leftMotor.setPower(.20);
+        Motors.rightMotor.setPower(.20);
+        Motors.leftMotor2.setPower(.20);
+        Motors.rightMotor2.setPower(.20);
 
         Thread.sleep(2000);
 
@@ -132,10 +174,10 @@ public class AutoDriveBlueBeaconOnly extends LightningAutonomousBaseOpmode {
         Thread.sleep(500);
 
         //bias to the left a little bit
-        Motors.leftMotor.setPower(.25);
-        Motors.rightMotor.setPower(.25);
-        Motors.leftMotor2.setPower(.25);
-        Motors.rightMotor2.setPower(.25);
+        Motors.leftMotor.setPower(.24);
+        Motors.rightMotor.setPower(.20);
+        Motors.leftMotor2.setPower(.24);
+        Motors.rightMotor2.setPower(.20);
 
         Thread.sleep(1500);
 
@@ -162,16 +204,15 @@ public class AutoDriveBlueBeaconOnly extends LightningAutonomousBaseOpmode {
         ButtonPush.FrontPushIn();
 
         Motors.leftMotor.setPower(.25);
-        Motors.rightMotor.setPower(.7);
+        Motors.rightMotor.setPower(.8);
         Motors.leftMotor2.setPower(.25);
-        Motors.rightMotor2.setPower(.7);
-        Thread.sleep(250);
+        Motors.rightMotor2.setPower(.8);
+        Thread.sleep(300);
 
-
-        Motors.leftMotor.setPower(.5);
-        Motors.rightMotor.setPower(.5);
-        Motors.leftMotor2.setPower(.5);
-        Motors.rightMotor2.setPower(.5);
+        Motors.leftMotor.setPower(.55);
+        Motors.rightMotor.setPower(.45);
+        Motors.leftMotor2.setPower(.55);
+        Motors.rightMotor2.setPower(.45);
 
         Thread.sleep(2000);
 
