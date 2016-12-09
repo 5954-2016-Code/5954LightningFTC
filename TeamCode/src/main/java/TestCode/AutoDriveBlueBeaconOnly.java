@@ -151,7 +151,7 @@ public class AutoDriveBlueBeaconOnly extends LightningAutonomousBaseOpmode {
 
         //Blue Team
         telemetry.addData("BColor", "%3d:%3d", ButtonPush.csPushR.red(), ButtonPush.csPushR.blue());
-        while(ButtonPush.csPushR.red() < 10)
+        while(ButtonPush.csPushR.blue() < 10)
         {
             //telemetry.addData("FColor", "%3d:%3d", csChasis.red(), csChasis.green() , csChasis.blue());
             telemetry.addData("BColor", "%3d:%3d", ButtonPush.csPushR.red(), ButtonPush.csPushR.blue());
@@ -174,16 +174,16 @@ public class AutoDriveBlueBeaconOnly extends LightningAutonomousBaseOpmode {
         Thread.sleep(500);
 
         //bias to the left a little bit
-        Motors.leftMotor.setPower(.24);
-        Motors.rightMotor.setPower(.20);
-        Motors.leftMotor2.setPower(.24);
-        Motors.rightMotor2.setPower(.20);
+        Motors.leftMotor.setPower(.20);
+        Motors.rightMotor.setPower(.16);
+        Motors.leftMotor2.setPower(.20);
+        Motors.rightMotor2.setPower(.16);
 
         Thread.sleep(1500);
 
         //Red Team
         //telemetry.addData("BColor", "%3d:%3d", ButtonPush.csPushR.red(), ButtonPush.csPushR.blue());
-        while(ButtonPush.csPushR.red() < 10)
+        while(ButtonPush.csPushR.blue() < 10)
         {
             //telemetry.addData("FColor", "%3d:%3d", csChasis.red(), csChasis.green() , csChasis.blue());
             telemetry.addData("BColor", "%3d:%3d", ButtonPush.csPushR.red(), ButtonPush.csPushR.blue());
@@ -203,11 +203,11 @@ public class AutoDriveBlueBeaconOnly extends LightningAutonomousBaseOpmode {
         ButtonPush.RearPushIn();
         ButtonPush.FrontPushIn();
 
-        Motors.leftMotor.setPower(.25);
+        Motors.leftMotor.setPower(.20);
         Motors.rightMotor.setPower(.8);
-        Motors.leftMotor2.setPower(.25);
+        Motors.leftMotor2.setPower(.20);
         Motors.rightMotor2.setPower(.8);
-        Thread.sleep(300);
+        Thread.sleep(350);
 
         Motors.leftMotor.setPower(.55);
         Motors.rightMotor.setPower(.45);

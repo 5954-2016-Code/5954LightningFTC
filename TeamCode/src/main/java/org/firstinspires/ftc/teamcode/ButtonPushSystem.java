@@ -15,18 +15,21 @@ public class ButtonPushSystem {
 
     // Button Push System
     public Servo    sPushF = null,
-                    sPushR = null;
+                    sPushR = null,
+                    sPushR2 = null;
 
     public ColorSensor  csPushR = null;
 
     static final double downPosition = 1.0f,
-                        upPosition =  -.75f;
+                        upPosition =  -1.0f;
 
     public void init(HardwareMap HWMap) {
         // Button Push System Init
         sPushF = HWMap.servo.get("sPushF");
         sPushR = HWMap.servo.get("sPushR");
+        sPushR2 = HWMap.servo.get("sPushR2");
         sPushR.setDirection(Servo.Direction.REVERSE);
+        sPushR2.setDirection(Servo.Direction.REVERSE);
         csPushR = HWMap.colorSensor.get("csPushR");
         csPushR.setI2cAddress(I2cAddr.create8bit(0x70) );
         csPushR.enableLed(false);
@@ -40,16 +43,16 @@ public class ButtonPushSystem {
         sPushF.setPosition(1);
     }
 
-    public  void FrontPushIn(){
-        sPushF.setPosition(0.1);
-    }
+    public  void FrontPushIn(){ sPushF.setPosition(-.80); }
 
     public void RearPushOut(){
         sPushR.setPosition(downPosition);
+        sPushR2.setPosition(downPosition);
     }
 
     public void RearPushIn(){
         sPushR.setPosition(upPosition);
+        sPushR2.setPosition(upPosition);
     }
 
     public void TeleopButtonPush(boolean FrontButton, boolean RearButton){

@@ -26,8 +26,7 @@ import java.util.Locale;
 
 //Modified to work with Adafruit IMU
 @Autonomous(name="Blue Base: Auto Drive", group="5954")
-@Disabled
-
+//@Disabled
 public class LightbotBlueAutoDriveByGyroBase extends LightningAutonomousBaseOpmode {
     @Override
     public void runOpMode() throws InterruptedException {

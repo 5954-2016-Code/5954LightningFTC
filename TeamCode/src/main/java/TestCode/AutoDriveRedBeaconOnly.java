@@ -81,7 +81,7 @@ public class AutoDriveRedBeaconOnly extends LightningAutonomousBaseOpmode {
 
         ButtonPush.FrontPushOut();
 
-        gyroDrive(DRIVE_SPEED, 38, 0.0);  // Drive FWD
+        gyroDrive(DRIVE_SPEED, 40, 0.0);  // Drive FWD
         Thread.sleep(250);
 
         //Right Turn -- Note: Left and Right motors appear to be swapped for turning
@@ -90,7 +90,7 @@ public class AutoDriveRedBeaconOnly extends LightningAutonomousBaseOpmode {
         Motors.leftMotor2.setPower(.25);
         Motors.rightMotor2.setPower(.7);
 
-        Thread.sleep(750);
+        Thread.sleep(575);
 //        //while gyro is reading less than X
 //        double currentError = 0;
 //        do {
@@ -120,10 +120,10 @@ public class AutoDriveRedBeaconOnly extends LightningAutonomousBaseOpmode {
         }
         Thread.sleep(100);
 
-        Motors.leftMotor.setPower(-.25);
-        Motors.rightMotor.setPower(-.20);
-        Motors.leftMotor2.setPower(-.25);
-        Motors.rightMotor2.setPower(-.20);
+        Motors.leftMotor.setPower(-.20);
+        Motors.rightMotor.setPower(-.15);
+        Motors.leftMotor2.setPower(-.20);
+        Motors.rightMotor2.setPower(-.15);
 
         //Red Team
         telemetry.addData("BColor", "%3d:%3d", ButtonPush.csPushR.red(), ButtonPush.csPushR.blue());
@@ -149,10 +149,10 @@ public class AutoDriveRedBeaconOnly extends LightningAutonomousBaseOpmode {
         Thread.sleep(500);
 
         //bias to the left a little bit
-        Motors.leftMotor.setPower(.3);
-        Motors.rightMotor.setPower(.25);
-        Motors.leftMotor2.setPower(.3);
-        Motors.rightMotor2.setPower(.25);
+        Motors.leftMotor.setPower(.20);
+        Motors.rightMotor.setPower(.16);
+        Motors.leftMotor2.setPower(.20);
+        Motors.rightMotor2.setPower(.16);
 
         Thread.sleep(1500);
 
