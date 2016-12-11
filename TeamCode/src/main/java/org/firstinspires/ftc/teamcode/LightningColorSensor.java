@@ -13,10 +13,6 @@ import com.qualcomm.robotcore.util.TypeConversion;
 
 import java.util.concurrent.locks.Lock;
 
-/**
- * Created by jwthane on 11/11/2016.
- */
-
     public class LightningColorSensor extends I2cControllerPortDeviceImpl implements /*ColorSensor,*/ I2cController.I2cPortReadyCallback {
 
         //------------------------------------------------------------------------------------------------

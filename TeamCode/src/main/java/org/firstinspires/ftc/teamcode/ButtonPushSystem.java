@@ -5,11 +5,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.Servo;
 
-/**
- * Created by ericw on 11/2/2016.
- */
-
-
+//This class performs the "Beacon Button Bopper" initialization functions
+//This includes initializing and reading the color sensor
 public class ButtonPushSystem {
     public enum BeaconColor {Red, Blue, Other}
 

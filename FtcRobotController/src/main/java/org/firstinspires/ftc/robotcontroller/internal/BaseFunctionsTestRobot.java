@@ -8,9 +8,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import java.sql.Time;
 
-/**
- * Created by jwthane on 10/1/2016.
- */
 public class BaseFunctionsTestRobot extends OpMode {
 
     // DC Motors

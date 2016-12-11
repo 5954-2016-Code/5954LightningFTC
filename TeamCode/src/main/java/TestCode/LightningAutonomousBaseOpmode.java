@@ -22,7 +22,12 @@ import org.firstinspires.ftc.teamcode.LargeBallLiftSystem;
 
 import java.util.Locale;
 
-//Works with Adafruit IMU
+import static android.R.attr.gravity;
+
+//This class is the basis for the Autonomous opmodes
+//It initializes the hardware and has provides methods to
+//drive the robot by gyro or by encoder without gyro
+//Works with Adafruit Inertial Measurement Unit
 public class LightningAutonomousBaseOpmode extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -43,6 +48,8 @@ public class LightningAutonomousBaseOpmode extends LinearOpMode {
     public boolean dontDriveLeftWheels = false;
     public boolean dontDriveRightWheels = false;
 
+    public boolean initGyro = false;
+
     Acceleration gravity;
     //Output counts per revolution of Output Shaft
     static final double     COUNTS_PER_MOTOR_REV    = 1120; //(cpr): 1120 (280 rises of Channel A) // eg: TETRIX Motor Encoder: 1440
@@ -60,6 +67,8 @@ public class LightningAutonomousBaseOpmode extends LinearOpMode {
     static final double     P_TURN_COEFF            = 0.005; //Original: .1    // Larger is more responsive, but also less stable
     static final double     P_DRIVE_COEFF           = 0.03; //Original: 0.15;     // Larger is more responsive, but also less stable
 
+    //This code should reset the IMU position to 0 and start polling the sensor in a thread
+    //for the current heading
     public void resetIMU_Position_Integration()throws InterruptedException
     {
          imu.stopAccelerationIntegration();
@@ -109,14 +118,18 @@ public class LightningAutonomousBaseOpmode extends LinearOpMode {
         parameters.loggingTag          = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
-        // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
-        // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
-        // and named "imu".
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
+        //Added the initGyro variable so that we can avoid the 6-7 second gyro initialization
+        //if the gyro is not being used.
+        if (initGyro == true) {
+            // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
+            // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
+            // and named "imu".
+            imu = hardwareMap.get(BNO055IMU.class, "imu");
+            imu.initialize(parameters);
 
-        // Start the logging of measured acceleration
-        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+            // Start the logging of measured acceleration
+            imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+        }
 
         Motors.leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         Motors.leftMotor2.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -131,15 +144,21 @@ public class LightningAutonomousBaseOpmode extends LinearOpMode {
 
         // Wait for the game to start (Display Gyro value), and reset gyro before we move..
         while (!isStarted()) {
-            newAngles   = imu.getAngularOrientation().toAxesReference(AxesReference.INTRINSIC).toAxesOrder(AxesOrder.ZYX);
-            telemetry.addData(">", "Robot Heading = %.1f", angleDegrees(newAngles.angleUnit, newAngles.firstAngle));
+            if (initGyro == true) {
+                newAngles = imu.getAngularOrientation().toAxesReference(AxesReference.INTRINSIC).toAxesOrder(AxesOrder.ZYX);
+                telemetry.addData(">", "Robot Heading = %.1f", angleDegrees(newAngles.angleUnit, newAngles.firstAngle));
+            }
+            telemetry.addData("BColor", "%3d:%3d", ButtonPush.csPushR.red(), ButtonPush.csPushR.blue());
             telemetry.addData(">", "Robot Ready.");
             telemetry.update();
             idle();
         }
 
-        //This really isn't necessary but should help if the Motors were bumped during calibration
-        resetIMU_Position_Integration();
+        if (initGyro == true) {
+            //This really isn't necessary but should help if the Motors were bumped during calibration
+            resetIMU_Position_Integration();
+        }
+
 
         Motors.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         Motors.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -271,6 +290,9 @@ public class LightningAutonomousBaseOpmode extends LinearOpMode {
             // Turn off RUN_TO_POSITION
             Motors.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             Motors.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+//            Motors.leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//            Motors.rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
     }
 
@@ -432,5 +454,86 @@ public class LightningAutonomousBaseOpmode extends LinearOpMode {
         return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
         //return String.format("%.1f", AngleUnit.DEGREES.normalize(degrees));
     }
+
+    /*
+ *  Method to perfmorm a relative move, based on encoder counts.
+ *  Encoders are not reset as the move is based on the current position.
+ *  Move will stop if any of three conditions occur:
+ *  1) Move gets to the desired position
+ *  2) Move runs out of time
+ *  3) Driver stops the opmode running.
+ */
+    public void encoderDrive(double speed,
+                             double leftInches, double rightInches,
+                             double timeoutS) {
+        int newLeftTarget;
+        int newRightTarget;
+
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            newLeftTarget = Motors.leftMotor.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+            newRightTarget = Motors.rightMotor.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+            Motors.leftMotor.setTargetPosition(newLeftTarget);
+            Motors.rightMotor.setTargetPosition(newRightTarget);
+
+            // Turn On RUN_TO_POSITION
+            Motors.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            Motors.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // reset the timeout time and start motion.
+            holdTimer.reset();
+            //Motors.leftMotor.setPower(Math.abs(speed));
+            //Motors.rightMotor.setPower(Math.abs(speed));
+            Motors.leftMotor.setPower(Math.abs(speed));
+            Motors.leftMotor2.setPower(Math.abs(speed));
+            Motors.rightMotor.setPower(Math.abs(speed));
+            Motors.rightMotor2.setPower(Math.abs(speed));
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            while (opModeIsActive() &&
+                    (holdTimer.seconds() < timeoutS) &&
+                    /*Motors.leftMotor.getCurrentPosition() < newLeftTarget)*/
+                    (Motors.leftMotor.isBusy() && Motors.rightMotor.isBusy()))
+                {
+                //if (distance > 0)
+                //{
+                    if ((Motors.leftMotor.getCurrentPosition() >= newLeftTarget)
+                            || (Motors.rightMotor.getCurrentPosition() >= newRightTarget))
+                    {
+                        // Stop all motion;
+                        Motors.leftMotor.setPower(0);
+                        Motors.rightMotor.setPower(0);
+                        Motors.leftMotor2.setPower(0);
+                        Motors.rightMotor2.setPower(0);
+
+                        // Turn off RUN_TO_POSITION
+                        Motors.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                        Motors.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                        break;
+                    }
+                //}
+
+                // Display it for the driver.
+                telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
+                telemetry.addData("Path2",  "Running at %7d :%7d",
+                        Motors.leftMotor.getCurrentPosition(),
+                        Motors.rightMotor.getCurrentPosition());
+                telemetry.update();
+            }
+
+            // Stop all motion;
+            Motors.leftMotor.setPower(0);
+            Motors.rightMotor.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            Motors.leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            Motors.rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            //  sleep(250);   // optional pause after each move
+        }
+    }
+
 
 }

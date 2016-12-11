@@ -24,57 +24,21 @@ import org.firstinspires.ftc.teamcode.LargeBallLiftSystem;
 
 import java.util.Locale;
 
-/**
- * This file illustrates the concept of driving a path based on Gyro heading and encoder counts.
- * It uses the common Pushbot hardware class to define the drive on the Motors.
- * The code is structured as a LinearOpMode
- *
- * The code REQUIRES that you DO have encoders on the wheels,
- *   otherwise you would use: PushbotAutoDriveByTime;
- *
- *  This code ALSO requires that you have a Modern Robotics I2C gyro with the name "gyro"
- *   otherwise you would use: PushbotAutoDriveByEncoder;
- *
- *  This code requires that the drive Motors have been configured such that a positive
- *  power command moves them forward, and causes the encoders to count UP.
- *
- *  This code uses the RUN_TO_POSITION mode to enable the Motor controllers to generate the run profile
- *
- *  In order to calibrate the Gyro correctly, the Motors must remain stationary during calibration.
- *  This is performed when the INIT button is pressed on the Driver Station.
- *  This code assumes that the Motors is stationary when the INIT button is pressed.
- *  If this is not the case, then the INIT should be performed again.
- *
- *  Note: in this example, all angles are referenced to the initial coordinate frame set during the
- *  the Gyro Calibration process, or whenever the program issues a resetZAxisIntegrator() call on the Gyro.
- *
- *  The angle of movement/rotation is assumed to be a standardized rotation around the Motors Z axis,
- *  which means that a Positive rotation is Counter Clock Wise, looking down on the field.
- *  This is consistent with the FTC field coordinate conventions set out in the document:
- *  ftc_app\doc\tutorial\FTC_FieldCoordinateSystemDefinition.pdf
- *
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
-
+//Drive to the Blue Beacons and attempt to press the blue beacon buttons
+//Finally drive to the ramp
 //Modified to work with Adafruit IMU
-
 @Autonomous(name="Blue Only Beacon: Auto Drive", group="5954")
 //@Disabled
 public class AutoDriveBlueBeaconOnly extends LightningAutonomousBaseOpmode {
     @Override
     public void runOpMode() throws InterruptedException {
+        initGyro = false;
         initHardware(); //Performs all off the initialization+gyro calibration in the base class
 
+        //Push the front wall guide out using the front servo
         ButtonPush.FrontPushOut();
 
-        //TODO: Time this out so that we don't cross the line before 10 seconds have passed
-
-        //TODO: Test if this will work with target 180 degrees?
-        //It doesn't like to drive backward with gyroDrive--it tries to turn around
-        //gyroDrive(DRIVE_SPEED, -24 /*-96*/, 180);  // Drive RWD
-        //
-
+//Currently these few lines are for reference only in case we want to use the getRuntime() value
 //        //This is a possible way to track time
 //        while (this.getRuntime() < 2)
 //        {
@@ -86,26 +50,33 @@ public class AutoDriveBlueBeaconOnly extends LightningAutonomousBaseOpmode {
         Motors.rightMotor.setPower(-1.0);
         Motors.leftMotor2.setPower(-1.0);
         Motors.rightMotor2.setPower(-1.0);
+
+        //Cause this thread to sleep for the designated time while the motors
+        //continue to drive
         Thread.sleep(500);
-        //Thread.sleep(3300);
 
         Motors.leftMotor.setPower(0);
         Motors.rightMotor.setPower(0);
         Motors.leftMotor2.setPower(0);
         Motors.rightMotor2.setPower(0);
         Thread.sleep(100);
-        //Thread.sleep(7000);
 
         Motors.leftMotor.setPower(-.7);
         Motors.rightMotor.setPower(-.25);
         Motors.leftMotor2.setPower(-.7);
         Motors.rightMotor2.setPower(-.25);
+
+        //Cause this thread to sleep for the designated time while the motors
+        //continue to drive
         Thread.sleep(640);
 
         Motors.leftMotor.setPower(-1.0);
         Motors.rightMotor.setPower(-1.0);
         Motors.leftMotor2.setPower(-1.0);
         Motors.rightMotor2.setPower(-1.0);
+
+        //Cause this thread to sleep for the designated time while the motors
+        //continue to drive
         Thread.sleep(2300);
 
         Motors.leftMotor.setPower(0);
@@ -118,6 +89,9 @@ public class AutoDriveBlueBeaconOnly extends LightningAutonomousBaseOpmode {
         Motors.rightMotor.setPower(-0.7);
         Motors.leftMotor2.setPower(-0.5);
         Motors.rightMotor2.setPower(-0.7);
+
+        //Cause this thread to sleep for the designated time while the motors
+        //continue to drive
         Thread.sleep(1500);
 
         //Left Turn -- Note: Left and Right motors appear to be swapped for turning
@@ -125,6 +99,9 @@ public class AutoDriveBlueBeaconOnly extends LightningAutonomousBaseOpmode {
         Motors.rightMotor.setPower(-.7);
         Motors.leftMotor2.setPower(-.25);
         Motors.rightMotor2.setPower(-.7);
+
+        //Cause this thread to sleep for the designated time while the motors
+        //continue to drive
         Thread.sleep(250);
 
         //bias towards the left a little bit
@@ -133,11 +110,14 @@ public class AutoDriveBlueBeaconOnly extends LightningAutonomousBaseOpmode {
         Motors.leftMotor2.setPower(.20);
         Motors.rightMotor2.setPower(.20);
 
+        //Cause this thread to sleep for the designated time while the motors
+        //continue to drive
         Thread.sleep(2000);
 
         //Try stopping the gyro to avoid any conflicts
         //on the i2c bus with the color sensors
-        imu.stopAccelerationIntegration();
+        //TODO: enable the line below if gyrodrive function is used to prevent interference with color sensor
+        //imu.stopAccelerationIntegration();
         while (ButtonPush.csPushR.blue() > 200)
         {
             idle();
@@ -151,7 +131,9 @@ public class AutoDriveBlueBeaconOnly extends LightningAutonomousBaseOpmode {
 
         //Blue Team
         telemetry.addData("BColor", "%3d:%3d", ButtonPush.csPushR.red(), ButtonPush.csPushR.blue());
-        while(ButtonPush.csPushR.blue() < 10)
+
+        //Keep driving until the desired color level is found
+        while(ButtonPush.csPushR.blue() < 14)
         {
             //telemetry.addData("FColor", "%3d:%3d", csChasis.red(), csChasis.green() , csChasis.blue());
             telemetry.addData("BColor", "%3d:%3d", ButtonPush.csPushR.red(), ButtonPush.csPushR.blue());
@@ -183,14 +165,17 @@ public class AutoDriveBlueBeaconOnly extends LightningAutonomousBaseOpmode {
 
         //Red Team
         //telemetry.addData("BColor", "%3d:%3d", ButtonPush.csPushR.red(), ButtonPush.csPushR.blue());
-        while(ButtonPush.csPushR.blue() < 10)
+
+        //Keep driving until the desired color level is found
+        while(ButtonPush.csPushR.blue() < 14)
         {
-            //telemetry.addData("FColor", "%3d:%3d", csChasis.red(), csChasis.green() , csChasis.blue());
             telemetry.addData("BColor", "%3d:%3d", ButtonPush.csPushR.red(), ButtonPush.csPushR.blue());
             telemetry.update();
             //Thread.sleep(2);
             idle();
         }
+
+        //Stop the motors
         Motors.leftMotor.setPower(0);
         Motors.rightMotor.setPower(0);
         Motors.leftMotor2.setPower(0);
@@ -198,8 +183,9 @@ public class AutoDriveBlueBeaconOnly extends LightningAutonomousBaseOpmode {
 
         //Push button on beacon
         ButtonPush.RearPushOut();
-
         Thread.sleep(1500);
+
+        //Pull in the "Beacon Button Bopper" & the front wall guide wheel
         ButtonPush.RearPushIn();
         ButtonPush.FrontPushIn();
 
@@ -207,6 +193,9 @@ public class AutoDriveBlueBeaconOnly extends LightningAutonomousBaseOpmode {
         Motors.rightMotor.setPower(.8);
         Motors.leftMotor2.setPower(.20);
         Motors.rightMotor2.setPower(.8);
+
+        //Cause this thread to sleep for the designated time while the motors
+        //continue to drive
         Thread.sleep(350);
 
         Motors.leftMotor.setPower(.55);
@@ -214,8 +203,11 @@ public class AutoDriveBlueBeaconOnly extends LightningAutonomousBaseOpmode {
         Motors.leftMotor2.setPower(.55);
         Motors.rightMotor2.setPower(.45);
 
+        //Cause this thread to sleep for the designated time while the motors
+        //continue to drive
         Thread.sleep(2000);
 
+        //Stop the motors
         Motors.leftMotor.setPower(0);
         Motors.rightMotor.setPower(0);
         Motors.leftMotor2.setPower(0);

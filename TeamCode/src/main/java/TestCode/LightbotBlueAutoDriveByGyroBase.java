@@ -30,6 +30,7 @@ import java.util.Locale;
 public class LightbotBlueAutoDriveByGyroBase extends LightningAutonomousBaseOpmode {
     @Override
     public void runOpMode() throws InterruptedException {
+        initGyro = true;
         initHardware(); //Performs all off the initialization+gyro calibration in the base class
 
         gyroDrive(DRIVE_SPEED, 40, 0.0);  // Drive FWD

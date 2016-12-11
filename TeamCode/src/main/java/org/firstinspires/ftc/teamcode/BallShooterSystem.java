@@ -4,10 +4,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-/**
- * Created by ericw on 11/2/2016.
- */
-
 public class BallShooterSystem {
     // Ball Shooter System
     private DcMotor  mShooterL = null,

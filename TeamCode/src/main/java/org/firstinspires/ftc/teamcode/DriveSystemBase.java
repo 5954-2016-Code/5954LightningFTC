@@ -19,10 +19,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 import java.util.Locale;
 
-/**
- * Created by ericw on 10/29/2016.
- */
-
 public class DriveSystemBase {
     // Drive System
     public DcMotor mDriveL1 = null,
@@ -54,6 +50,7 @@ public class DriveSystemBase {
     public DriveSystemBase(){
     }
 
+    //initialize the drive system hardware
     public void init(HardwareMap HWMap) {
         // Drive System Init
         mDriveL1 = HWMap.dcMotor.get("mDriveL1");

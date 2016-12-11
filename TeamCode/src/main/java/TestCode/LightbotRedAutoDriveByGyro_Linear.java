@@ -25,6 +25,8 @@ import org.firstinspires.ftc.teamcode.LargeBallLiftSystem;
 
 import java.util.Locale;
 
+//This code will drive to the center vortex and shoot the balls
+//It then tries to get to the beacons and press them
 //Modified to work with Adafruit IMU
 @Autonomous(name="Red Beacon: Auto Drive", group="5954")
 @Disabled

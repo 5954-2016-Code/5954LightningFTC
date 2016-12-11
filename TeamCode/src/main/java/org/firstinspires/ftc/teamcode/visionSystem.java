@@ -18,10 +18,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by jimt on 10/29/2016.
- */
-
 public class VisionSystem {
 
     public static final String TAG = "Vuforia Images";

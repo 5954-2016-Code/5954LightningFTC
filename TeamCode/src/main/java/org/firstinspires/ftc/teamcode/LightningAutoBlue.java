@@ -14,10 +14,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
-/**
- * Created by ericw on 11/9/2016.
- */
-
 public class LightningAutoBlue extends LinearOpMode {
 
     DriveSystemBase DriveSystem = new DriveSystemBase();

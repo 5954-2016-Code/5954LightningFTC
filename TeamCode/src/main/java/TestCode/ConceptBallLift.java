@@ -1,5 +1,6 @@
 package TestCode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,6 +11,7 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Created by ericw on 10/22/2016.
  */
 @TeleOp(name = "Concept: Ball Lift", group = "Concept")
+@Disabled
 public class ConceptBallLift extends OpMode {
 
 

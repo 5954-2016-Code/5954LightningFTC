@@ -6,10 +6,6 @@ import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-/**
- * Created by ericw on 11/2/2016.
- */
-
 public class BallManagementSystem {
     // Ball Management System
     public Servo    sBallIntake = null,
@@ -24,6 +20,7 @@ public class BallManagementSystem {
 
     }
 
+    //Initialize the hardware
     public void init(HardwareMap HWMap){
         // Ball Management System Init
         sBallIntake = HWMap.servo.get("sBallIntake");

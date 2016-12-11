@@ -30,6 +30,8 @@ public class LightningFunctions extends OpMode {
 
     private boolean first_run = false;
 
+    public boolean beaconFindStarted = false;
+
     public void waitForTick(long periodMs) throws InterruptedException {
 
         long  remaining = periodMs - (long)period.milliseconds();
